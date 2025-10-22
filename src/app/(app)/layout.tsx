@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const dana = localFont({
-  src: "../../public/font/DanaVF.woff2",
+  src: "../../../public/font/DanaVF.woff2",
   variable: "--font-dana",
   display: "swap",
 });
