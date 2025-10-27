@@ -58,7 +58,7 @@ export default function Navbar() {
     <nav className="h-20 border-b bg-white flex items-center">
       <Container>
         <div className="flex justify-between">
-          <Link href={"/"} className="pr-6 flex items-center">
+          <Link href={"/"} className="flex items-center">
             <span className="text-2xl font-bold text-gray-900">مد کالکشن</span>
           </Link>
 
