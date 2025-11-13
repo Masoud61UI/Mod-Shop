@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate:types": "payload generate:types"
+    "generate:types": "payload generate:types",
+    "db:seed": "tsx src/seed-guaranteed.ts",
+    "db:fresh": "npm run db:seed",
+    "db:reset": "npm run db:fresh && npm run db:seed"
   },
   "dependencies": {
     "@payloadcms/db-mongodb": "^3.60.0",
