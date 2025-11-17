@@ -6,12 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
 
-import { CustomCategory } from "../types";
+import { CategoriesGetManyOutput } from "@/src/modules/categories/types";
+
 import CategoryDropdown from "./category-dropdown";
 import CategoriesSidebar from "./CategoriesSidebar";
 
 interface Props {
-  data: CustomCategory[];
+  data: CategoriesGetManyOutput;
 }
 
 export default function Categories({ data }: Props) {
@@ -64,7 +65,7 @@ export default function Categories({ data }: Props) {
 
   return (
     <div className="relative w-full">
-      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} data={data} />
+      <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
 
       <div
         ref={measureRef}

@@ -1,17 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/utils";
 
+import { CategoriesGetManyOutput } from "@/src/modules/categories/types";
+
 import SubcategoryMenu from "./SubcategoryMenu";
 import { useDropdownPosition } from "./use-dropdown-position";
-import { CustomCategory } from "../types";
-import Link from "next/link";
 
 interface Props {
-  category: CustomCategory;
+  category: CategoriesGetManyOutput[1];
   isActive?: boolean;
   isNavigationHovered?: boolean;
 }
@@ -61,9 +62,7 @@ export default function CategoryDropdown({
             isOpen && "text-purple-500 border-purple-500"
           )}
         >
-          <Link
-            href={`/${category.slug === "all" ? "" : category.slug}`}
-          >
+          <Link href={`/${category.slug === "all" ? "" : category.slug}`}>
             {category.name}
           </Link>
         </Button>
