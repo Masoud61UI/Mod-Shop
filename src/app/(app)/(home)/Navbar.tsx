@@ -108,7 +108,7 @@ export default function Navbar() {
               asChild
               className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
             >
-              <Link href="/login">ثبت‌نام / ورود</Link>
+              <Link prefetch href="/login">ثبت‌نام / ورود</Link>
             </Button>
           </div>
 

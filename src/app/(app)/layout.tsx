@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+
 import { TRPCReactProvider } from "@/src/trpc/client";
+import { Toaster } from "@/src/components/ui/sonner";
+
+import localFont from "next/font/local";
 
 const dana = localFont({
   src: "../../../public/font/DanaVF.woff2",
@@ -22,7 +25,10 @@ export default function RootLayout({
   return (
     <html dir="rtl" lang="fa" className={dana.variable}>
       <body className={`${dana.className} text-right`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <Toaster />
+          </TRPCReactProvider>
       </body>
     </html>
   );
