@@ -4,8 +4,8 @@ import z from "zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/src/trpc/client";
 import { Input } from "@/src/components/ui/input";
@@ -31,6 +31,8 @@ export const LogInView = () => {
   const [error, setError] = useState<string | null>(null);
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  
   const login = useMutation(
     trpc.auth.login.mutationOptions({
       onError: (error) => {
@@ -45,7 +47,8 @@ export const LogInView = () => {
 
         setError(persianErrors[errorMessage] || errorMessage);
       },
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
         router.push("/");
       },
     })

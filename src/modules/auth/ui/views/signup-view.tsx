@@ -2,11 +2,11 @@
 
 import z from "zod";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useTRPC } from "@/src/trpc/client";
 import { Input } from "@/src/components/ui/input";
@@ -30,13 +30,16 @@ export const SignUpView = () => {
   const [error, setError] = useState<string | null>(null);
 
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
   const register = useMutation(
     trpc.auth.register.mutationOptions({
       onError: (error) => {
         const errorMessage = error.shape?.message || error.message;
         setError(errorMessage);
       },
-      onSuccess: () => {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(trpc.auth.session.queryFilter());
         router.push("/");
       },
     })

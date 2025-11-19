@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { MenuIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
+import Container from "./Container";
 import { cn } from "@/src/lib/utils";
+import { useTRPC } from "@/src/trpc/client";
 import { Button } from "@/src/components/ui/button";
 import Navbarsidebar from "./NavbarSidebar";
-import Container from "./Container";
 
 interface NavbarItemProps {
   href: string;
@@ -53,6 +55,9 @@ const navbarItems = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const trpc = useTRPC();
+  const session = useQuery(trpc.auth.session.queryOptions());
 
   return (
     <nav className="h-20 border-b bg-white flex items-center">
@@ -104,12 +109,25 @@ export default function Navbar() {
                 </span>
               </Link>
             </Button>
-            <Button
-              asChild
-              className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
-            >
-              <Link prefetch href="/login">ثبت‌نام / ورود</Link>
-            </Button>
+            {session.data?.user ? (
+              <Button
+                asChild
+                className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
+              >
+                <Link prefetch href="/admin">
+                  پروفایل کاربری
+                </Link>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
+              >
+                <Link prefetch href="/login">
+                  ثبت‌نام / ورود
+                </Link>
+              </Button>
+            )}
           </div>
 
           <div className="flex lg:hidden items-center justify-center">
