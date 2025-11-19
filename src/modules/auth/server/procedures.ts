@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { headers as getHeaders, cookies as getCookies } from "next/headers";
-
 import { baseProcedure, createTRPCRouter } from "@/src/trpc/init";
 import { AUTH_COOKIE } from "../constants";
 import { loginSchema, registerSchema } from "../schemas";
@@ -41,7 +40,7 @@ export const authRouter = createTRPCRouter({
 
       if (existingUsername.docs[0]) {
         throw new TRPCError({
-          code: "BAD_REQUEST", 
+          code: "BAD_REQUEST",
           message: "این نام کاربری قبلاً انتخاب شده است.",
         });
       }
@@ -71,17 +70,19 @@ export const authRouter = createTRPCRouter({
       }
 
       const cookies = await getCookies();
-      cookies.set({
-        name: AUTH_COOKIE,
-        value: data.token,
+      cookies.set(AUTH_COOKIE, data.token, {
         httpOnly: true,
         path: "/",
+        sameSite: "lax",
+        secure: process.env.NODE_ENV === "production",
       });
+
+      return data;
     }),
 
   login: baseProcedure.input(loginSchema).mutation(async ({ input, ctx }) => {
     const data = await ctx.db.login({
-      collection: "users", 
+      collection: "users",
       data: {
         email: input.email,
         password: input.password,
@@ -96,11 +97,11 @@ export const authRouter = createTRPCRouter({
     }
 
     const cookies = await getCookies();
-    cookies.set({
-      name: AUTH_COOKIE,
-      value: data.token,
-      httpOnly: true, 
+    cookies.set(AUTH_COOKIE, data.token, {
+      httpOnly: true,
       path: "/",
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
     return data;
