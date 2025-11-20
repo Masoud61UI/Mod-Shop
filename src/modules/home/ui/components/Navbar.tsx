@@ -6,11 +6,12 @@ import { MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
-import Container from "./Container";
 import { cn } from "@/src/lib/utils";
 import { useTRPC } from "@/src/trpc/client";
 import { Button } from "@/src/components/ui/button";
+
 import Navbarsidebar from "./NavbarSidebar";
+import Container from "./Container";
 
 interface NavbarItemProps {
   href: string;

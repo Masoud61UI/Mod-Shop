@@ -1,5 +1,6 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import { ListFilterIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,6 +17,8 @@ interface Props {
 }
 
 export default function Categories({ data }: Props) {
+  const params = useParams();
+
   const containerRef = useRef<HTMLDivElement>(null);
   const measureRef = useRef<HTMLDivElement>(null);
   const viewAllRef = useRef<HTMLDivElement>(null);
@@ -24,14 +27,19 @@ export default function Categories({ data }: Props) {
   const [isAnyHovered, setIsAnyHovered] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const activeCategory = "همه";
-
-  const activeCategoryIndex = data.findIndex(
-    (cat) => cat.slug === activeCategory
-  );
+  const categoryParam = params.category as string | undefined;
+  
+  const activeCategoryIndex = categoryParam
+    ? data.findIndex((cat) => cat.slug === categoryParam)
+    : -1;
 
   const isActiveCategoryHidden =
     activeCategoryIndex >= visibleCount && activeCategoryIndex !== -1;
+
+  const getIsActive = (categorySlug: string) => {
+    if (!categoryParam && categorySlug === "all") return true;
+    return categoryParam === categorySlug;
+  };
 
   useEffect(() => {
     const calculateVisible = () => {
@@ -76,7 +84,7 @@ export default function Categories({ data }: Props) {
           <div key={category.id}>
             <CategoryDropdown
               category={category}
-              isActive={activeCategory === category.slug}
+              isActive={getIsActive(category.slug)}
               isNavigationHovered={false}
             />
           </div>
@@ -93,7 +101,7 @@ export default function Categories({ data }: Props) {
           <div key={category.id}>
             <CategoryDropdown
               category={category}
-              isActive={activeCategory === category.slug}
+              isActive={getIsActive(category.slug)}
               isNavigationHovered={isAnyHovered}
             />
           </div>
