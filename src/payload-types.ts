@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     categories: Category;
+    products: Product;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -83,6 +84,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -183,6 +185,53 @@ export interface Category {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string | null;
+  category: string | Category;
+  subcategory?: (string | null) | Category;
+  price: number;
+  discountPrice?: number | null;
+  /**
+   * میتوانید درصد را manually وارد کنید
+   */
+  discountPercent?: number | null;
+  images: {
+    image: string | Media;
+    alt?: string | null;
+    id?: string | null;
+  }[];
+  /**
+   * برای هر ترکیب رنگ و سایز، یک ردیف اضافه کنید
+   */
+  inventory?:
+    | {
+        colorName: string;
+        /**
+         * اختیاری - برای نمایش در سایت
+         */
+        colorHex?: string | null;
+        size: string;
+        stock: number;
+        /**
+         * کد محصول برای این ترکیب خاص
+         */
+        sku?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  sku: string;
+  refundPolicy?: ('30-day' | '14-day' | '7-day' | '3-day' | '1-day' | 'no-refunds') | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -199,6 +248,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'categories';
         value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: string | Product;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -293,6 +346,42 @@ export interface CategoriesSelect<T extends boolean = true> {
   color?: T;
   parent?: T;
   subcategories?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  category?: T;
+  subcategory?: T;
+  price?: T;
+  discountPrice?: T;
+  discountPercent?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        id?: T;
+      };
+  inventory?:
+    | T
+    | {
+        colorName?: T;
+        colorHex?: T;
+        size?: T;
+        stock?: T;
+        sku?: T;
+        id?: T;
+      };
+  sku?: T;
+  refundPolicy?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }

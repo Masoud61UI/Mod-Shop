@@ -1,8 +1,7 @@
 export default function Footer() {
   const menuItems = [
-    { href: "/", label: "صفحه اصلی" },
-    { href: "/about", label: "درباره‌ما" },
     { href: "/products", label: "محصولات" },
+    { href: "/about", label: "درباره‌ما" },
     { href: "/contact", label: "تماس‌باما" },
     { href: "/privacy", label: "حریم خصوصی" },
   ];

@@ -44,6 +44,10 @@ const navbarItems = [
     children: "محصولات",
   },
   {
+    href: "/blog",
+    children: "وبلاگ",
+  },
+  {
     href: "/about",
     children: "درباره‌ما",
   },
