@@ -16,7 +16,16 @@ export const ProductList = ({ category }: Props) => {
     })
   );
 
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return (
+    <div className="grid grid-cols-1 sm:grid-col-2 md:grid-col-2 lg:grid-col-2 xl:grid-col-3 2xl:grid-col-4 gap-4">
+      {data?.docs.map((product) => (
+        <div className="border rounded-md bg-white p-4">
+          <h2 className="text-lg font-medium">{product.name}</h2>
+          <p>تومان{product.price}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export const ProductListSkeleton = () => {

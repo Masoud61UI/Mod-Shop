@@ -1,5 +1,6 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { TRPCReactProvider } from "@/src/trpc/client";
 import { Toaster } from "@/src/components/ui/sonner";
@@ -25,10 +26,12 @@ export default function RootLayout({
   return (
     <html dir="rtl" lang="fa" className={dana.variable}>
       <body className={`${dana.className} text-right`}>
-        <TRPCReactProvider>
-          {children}
-          <Toaster />
+        <NuqsAdapter>
+          <TRPCReactProvider>
+            {children}
+            <Toaster />
           </TRPCReactProvider>
+        </NuqsAdapter>
       </body>
     </html>
   );
