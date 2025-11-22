@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDownIcon, ChevronLeftIcon } from "lucide-react";
+import { ChevronDownIcon, ChevronLeftIcon, Key } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
 
@@ -36,6 +36,27 @@ const ProductFilter = ({ title, className, children }: ProductFilterProps) => {
 export const ProductFilters = () => {
   const [filters, setFilters] = useProductFilters();
 
+  const hasAnyFilters = Object.entries(filters).some(([key, value]) => {
+    if (key === "sort") return false;
+
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
+    if (typeof value === "string") {
+      return value !== "";
+    }
+
+    return value !== null;
+  });
+
+  const onClear = () => {
+    setFilters({
+      minPrice: "",
+      maxPrice: "",
+    });
+  };
+
   const onChange = (key: keyof typeof filters, value: unknown) => {
     setFilters({ ...filters, [key]: value });
   };
@@ -44,13 +65,15 @@ export const ProductFilters = () => {
     <div className="border rounded-md bg-gray-50 mt-[26px]">
       <div className="p-4 border-b flex items-center justify-between">
         <p className="font-medium text-base text-gray-700">فیلترها</p>
-        <button
-          type="button"
-          className="text-sm underline text-gray-400 cursor-pointer"
-          onClick={() => {}}
-        >
-          پاک کردن
-        </button>
+        {hasAnyFilters && (
+          <button
+            type="button"
+            className="text-sm underline text-gray-400 cursor-pointer"
+            onClick={() => onClear()}
+          >
+            پاک کردن
+          </button>
+        )}
       </div>
       <ProductFilter title="قیمت" className="border-b-0">
         <PriceFilter

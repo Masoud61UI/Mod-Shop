@@ -1,5 +1,7 @@
 import z from "zod";
-import { Where } from "payload";
+import { Sort, Where } from "payload";
+
+import { sortValues } from "../searchParams";
 
 import { Category } from "@/src/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/src/trpc/init";
@@ -11,10 +13,24 @@ export const productsRouter = createTRPCRouter({
         category: z.string().nullable().optional(),
         minPrice: z.string().nullable().optional(),
         maxPrice: z.string().nullable().optional(),
+        sort: z.enum(sortValues).nullable().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
       const where: Where = {};
+      let sort: Sort = "-createdAt";
+
+      if (input.sort === "جدیدترین") {
+        sort = "-createdAt";
+      }
+
+      if (input.sort === "پرفروش‌ترین") {
+        sort = "-createdAt";
+      }
+
+      if (input.sort === "قدیمی‌ترین") {
+        sort = "+createdAt";
+      }
 
       if (input.minPrice && input.maxPrice) {
         where.price = {
@@ -72,6 +88,7 @@ export const productsRouter = createTRPCRouter({
         collection: "products",
         depth: 1,
         where,
+        sort,
       });
 
       return data;

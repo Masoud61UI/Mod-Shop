@@ -1,6 +1,6 @@
-import { useQueryStates, parseAsString, parseAsStringLiteral } from "nuqs";
+import { createLoader, parseAsString, parseAsStringLiteral } from "nuqs/server";
 
-const sortValues = ["پرفروش‌ترین", "جدیدترین", "قدیمی‌ترین"] as const;
+export const sortValues = ["پرفروش‌ترین", "جدیدترین", "قدیمی‌ترین"] as const;
 
 const params = {
   sort: parseAsStringLiteral(sortValues).withDefault("جدیدترین"),
@@ -16,6 +16,4 @@ const params = {
     .withDefault(""),
 };
 
-export const useProductFilters = () => {
-  return useQueryStates(params);
-};
+export const loadProductsFilters = createLoader(params);

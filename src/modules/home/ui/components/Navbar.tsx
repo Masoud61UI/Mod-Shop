@@ -69,7 +69,7 @@ export default function Navbar() {
       <Container>
         <div className="flex justify-between">
           <Link href={"/"} className="flex items-center">
-            <span className="text-2xl font-bold text-gray-900">مد کالکشن</span>
+            <span className="text-2xl font-semibold text-gray-900">مد کالکشن</span>
           </Link>
 
           <Navbarsidebar

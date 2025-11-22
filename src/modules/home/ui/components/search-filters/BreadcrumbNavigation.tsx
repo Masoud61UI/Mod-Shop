@@ -35,18 +35,18 @@ export default function BreadcrumbNavigation({
                   <Link href={`/${activeCategory}`}>{activeCategoryName}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-              <BreadcrumbSeparator className="text-primary font-medium text-base">
+              <BreadcrumbSeparator className="text-gray-800 font-medium text-base">
                 /
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbPage className="text-sm font-medium text-primary">
+                <BreadcrumbPage className="text-sm font-medium text-gray-800">
                   {activeSubcategoryName}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </>
           ) : (
             <BreadcrumbItem>
-              <BreadcrumbPage className="text-sm font-medium text-primary">
+              <BreadcrumbPage className="text-sm font-medium text-gray-800">
                 {activeCategoryName}
               </BreadcrumbPage>
             </BreadcrumbItem>
