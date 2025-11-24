@@ -69,7 +69,9 @@ export default function Navbar() {
       <Container>
         <div className="flex justify-between">
           <Link href={"/"} className="flex items-center">
-            <span className="text-2xl font-semibold text-gray-900">مد کالکشن</span>
+            <span className="text-2xl font-semibold text-gray-900">
+              مد کالکشن
+            </span>
           </Link>
 
           <Navbarsidebar
@@ -78,7 +80,7 @@ export default function Navbar() {
             onOpenChange={setIsSidebarOpen}
           />
 
-          <div className="items-center gap-3 hidden lg:flex">
+          <div className="items-center gap-[6px] hidden lg:flex">
             {navbarItems.map((item) => (
               <NavbarItem
                 key={item.href}
