@@ -54,6 +54,7 @@ export const ProductList = ({ category }: Props) => {
               key={product.id}
               id={product.id}
               name={product.name}
+              slug={product.slug}
               imageUrl={product.image?.url}
               price={product.price}
               discountPrice={product.discountPrice || undefined}

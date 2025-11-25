@@ -5,6 +5,7 @@ import { StarIcon } from "lucide-react";
 interface ProductCardProps {
   id: string;
   name: string;
+  slug: string;
   imageUrl: string | null | undefined;
   price: number;
   discountPrice?: number;
@@ -16,6 +17,7 @@ interface ProductCardProps {
 export default function ProductCard({
   id,
   name,
+  slug,
   imageUrl,
   price,
   discountPrice,
@@ -27,7 +29,7 @@ export default function ProductCard({
   const hasDiscount = discountPrice && discountPrice < price;
 
   return (
-    <Link href={`/products/${id}`}>
+    <Link href={`/products/${slug}`}>
       <div className="border rounded-md bg-white overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
         <div className="relative aspect-square">
           <Image
