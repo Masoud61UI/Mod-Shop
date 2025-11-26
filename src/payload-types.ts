@@ -128,6 +128,7 @@ export interface UserAuthOperations {
 export interface User {
   id: string;
   username: string;
+  roles?: ('super-admin' | 'user')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -200,11 +201,13 @@ export interface Product {
    * میتوانید درصد را manually وارد کنید
    */
   discountPercent?: number | null;
-  images: {
-    image: string | Media;
-    alt?: string | null;
-    id?: string | null;
-  }[];
+  images?:
+    | {
+        image?: (string | null) | Media;
+        alt?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   /**
    * برای هر ترکیب رنگ و سایز، یک ردیف اضافه کنید
    */
@@ -301,6 +304,7 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   username?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

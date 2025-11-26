@@ -1,5 +1,4 @@
 import type { SearchParams } from "nuqs/server";
-
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 
 import { getQueryClient, trpc } from "@/src/trpc/server";
@@ -28,7 +27,7 @@ export default async function page({ params, searchParams }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductViewList category={subcategory} />
+      <ProductViewList category={subcategory} showFilters={true} />
     </HydrationBoundary>
   );
 }

@@ -42,43 +42,41 @@ export const Products: CollectionConfig = {
     },
 
     {
-  type: "row",
-  fields: [
-    {
-      name: "price",
-      type: "number",
-      required: true,
-      label: "قیمت اصلی (تومان)",
+      type: "row",
+      fields: [
+        {
+          name: "price",
+          type: "number",
+          required: true,
+          label: "قیمت اصلی (تومان)",
+        },
+        {
+          name: "discountPrice",
+          type: "number",
+          label: "قیمت بعد از تخفیف (تومان)",
+        },
+        {
+          name: "discountPercent",
+          type: "number",
+          label: "درصد تخفیف",
+          admin: {
+            description: "میتوانید درصد را manually وارد کنید",
+            // حذف readOnly: true
+          },
+        },
+      ],
     },
-    {
-      name: "discountPrice", 
-      type: "number",
-      label: "قیمت بعد از تخفیف (تومان)",
-    },
-    {
-      name: "discountPercent",
-      type: "number",
-      label: "درصد تخفیف",
-      admin: {
-        description: "میتوانید درصد را manually وارد کنید",
-        // حذف readOnly: true
-      },
-    },
-  ],
-},
 
     {
       name: "images",
       type: "array",
       label: "گالری تصاویر",
       minRows: 1,
-      required: true,
       fields: [
         {
           name: "image",
           type: "upload",
           relationTo: "media",
-          required: true,
           label: "تصویر",
         },
         {

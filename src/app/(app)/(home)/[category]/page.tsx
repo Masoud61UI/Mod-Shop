@@ -28,7 +28,7 @@ export default async function page({ params, searchParams }: Props) {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <ProductViewList category={category} />
+      <ProductViewList category={category} showFilters={true} />
     </HydrationBoundary>
   );
 }

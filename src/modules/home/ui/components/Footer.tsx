@@ -37,7 +37,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-white border-t border-gray-200">
+    <footer className="bg-white border-t border-gray-200 mt-16">
       <div className="py-8 container mx-auto px-4 sm:px-6 lg:px-0">
         <div className="flex flex-col items-center text-center">
           <a href="/" className="text-xl font-bold text-purple-600">

@@ -11,9 +11,10 @@ import { InboxIcon } from "lucide-react";
 
 interface Props {
   category?: string;
+  gridLayout?: "default" | "home";
 }
 
-export const ProductList = ({ category }: Props) => {
+export const ProductList = ({ category, gridLayout = "default" }: Props) => {
   const [filters] = useProductFilters();
 
   const trpc = useTRPC();
@@ -33,6 +34,11 @@ export const ProductList = ({ category }: Props) => {
       )
     );
 
+  const gridClass =
+    gridLayout === "home"
+      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
+      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4";
+
   if (data.pages?.[0]?.docs.length === 0) {
     return (
       <div className="border border-gray-600 border-dashed flex items-center justify-center p-8 flex-col gap-y-3 bg-white w-full rounded-lg">
@@ -46,13 +52,12 @@ export const ProductList = ({ category }: Props) => {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div className={gridClass}>
         {data?.pages
           .flatMap((page) => page.docs)
           .map((product) => (
             <ProductCard
               key={product.id}
-              id={product.id}
               name={product.name}
               slug={product.slug}
               imageUrl={product.image?.url}
@@ -80,9 +85,18 @@ export const ProductList = ({ category }: Props) => {
   );
 };
 
-export const ProductListSkeleton = () => {
+export const ProductListSkeleton = ({
+  gridLayout = "default",
+}: {
+  gridLayout?: "default" | "home";
+}) => {
+  const gridClass =
+    gridLayout === "home"
+      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
+      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4";
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+    <div className={gridClass}>
       {Array.from({ length: 8 }).map((_, index) => (
         <ProductCardSkeleton key={index} />
       ))}

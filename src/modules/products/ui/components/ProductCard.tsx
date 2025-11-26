@@ -3,7 +3,6 @@ import Image from "next/image";
 import { StarIcon } from "lucide-react";
 
 interface ProductCardProps {
-  id: string;
   name: string;
   slug: string;
   imageUrl: string | null | undefined;
@@ -15,7 +14,6 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({
-  id,
   name,
   slug,
   imageUrl,
@@ -30,40 +28,60 @@ export default function ProductCard({
 
   return (
     <Link href={`/products/${slug}`}>
-      <div className="border rounded-md bg-white overflow-hidden h-full flex flex-col hover:shadow-md transition-shadow">
-        <div className="relative aspect-square">
+      <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-purple-200 h-full flex flex-col">
+        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
           <Image
             alt={name}
             fill
             src={imageUrl || "/no-image2.png"}
-            className="object-cover"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
+
           {hasDiscount && (
-            <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-md text-xs font-medium">
-              {discountPercent}% تخفیف
+            <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
+              ٪{discountPercent} تخفیف
             </div>
           )}
+
+          <div className="absolute inset-0 flex items-center justify-center">
+            <button className="opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-white text-purple-500 px-4 py-2 rounded-full font-medium text-sm shadow-lg border cursor-pointer">
+              مشاهده محصول
+            </button>
+          </div>
         </div>
-        <div className="p-4 border-t flex flex-col gap-3 flex-1">
-          <h2 className="text-lg font-medium line-clamp-2">{name}</h2>
+
+        <div className="p-4 flex flex-col gap-3 flex-1">
+          <h2 className="text-lg font-semibold text-gray-800 line-clamp-2 leading-relaxed group-hover:text-gray-600 transition-colors">
+            {name}
+          </h2>
 
           {(reviewCount > 0 || reviewRating > 0) && (
-            <div className="flex items-center gap-1">
-              <StarIcon className="size-4 fill-yellow-400 text-yellow-400" />
-              <p className="text-sm font-medium">
-                {reviewRating} {reviewCount > 0 && `(${reviewCount})`}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                {[...Array(5)].map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    className={`size-4 ${
+                      i < Math.floor(reviewRating)
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "fill-gray-200 text-gray-200"
+                    }`}
+                  />
+                ))}
+              </div>
+              <p className="text-sm text-gray-500 font-medium">
+                {reviewRating} {reviewCount > 0 && `(${reviewCount} نظر)`}
               </p>
             </div>
           )}
-        </div>
-        <div className="p-4">
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center gap-[10px] mt-auto">
             {hasDiscount && (
-              <p className="text-sm text-gray-500 line-through">
+              <p className="text-sm text-gray-400 line-through">
                 {new Intl.NumberFormat("fa-IR").format(price)} تومان
               </p>
             )}
-            <p className="text-lg font-bold text-pink-600">
+            <p className="text-lg font-bold text-purple-600">
               {new Intl.NumberFormat("fa-IR").format(finalPrice)} تومان
             </p>
           </div>
@@ -75,6 +93,15 @@ export default function ProductCard({
 
 export const ProductCardSkeleton = () => {
   return (
-    <div className="w-full aspect-3/4 bg-neutral-200 rounded-lg animate-pulse" />
+    <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 h-full flex flex-col animate-pulse">
+      <div className="aspect-[4/5] bg-gray-200"></div>
+      <div className="p-4 flex flex-col gap-3 flex-1">
+        <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+        <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+        <div className="flex items-center gap-2 mt-auto">
+          <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+        </div>
+      </div>
+    </div>
   );
 };

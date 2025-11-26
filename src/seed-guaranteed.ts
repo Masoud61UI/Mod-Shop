@@ -18,14 +18,13 @@ const categories = [
   },
 ];
 
-const seedGuaranteed = async () => {
+const seedCategories = async () => {
   const client = new MongoClient(
     "mongodb+srv://Masoud:Bfpxr9mNrIwnYT5f@cluster0.lxsuafg.mongodb.net/shop"
   );
 
   try {
     await client.connect();
-
     const db = client.db("shop");
     const categoriesCollection = db.collection("categories");
 
@@ -59,11 +58,11 @@ const seedGuaranteed = async () => {
       console.log(`   - ${cat.name} (${cat.slug})`);
     });
   } catch (error) {
-    console.error("❌ Seed failed:", error);
+    console.error("❌ Seed با خطا مواجه شد:", error);
   } finally {
     await client.close();
-    console.log("🔌 MongoDB connection closed");
+    console.log("🔌 ارتباط با MongoDB بسته شد");
   }
 };
 
-seedGuaranteed();
+seedCategories();
