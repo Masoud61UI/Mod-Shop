@@ -7,6 +7,70 @@ import { Category, Media } from "@/src/payload-types";
 import { baseProcedure, createTRPCRouter } from "@/src/trpc/init";
 
 export const productsRouter = createTRPCRouter({
+  getOne: baseProcedure
+  .input(
+    z.object({
+      id: z.string().optional(),
+      slug: z.string().optional(),
+    })
+  )
+  .query(async ({ ctx, input }) => {
+    console.log("📥 دریافت درخواست برای:", input); // اضافه کنید
+
+    if (!input.id && !input.slug) {
+      throw new Error("ایدی یا اسلاگ محصول الزامی است");
+    }
+
+    let product;
+
+    if (input.id) {
+      product = await ctx.db.findByID({
+        collection: "products",
+        id: input.id,
+        depth: 2,
+      });
+    } else if (input.slug) {
+      // decode URL-encoded slug
+      const decodedSlug = decodeURIComponent(input.slug);
+      console.log("🔍 جستجو برای slug:", decodedSlug); // اضافه کنید
+
+      const result = await ctx.db.find({
+        collection: "products",
+        where: {
+          slug: {
+            equals: decodedSlug, // از decoded استفاده کنید
+          },
+        },
+        depth: 2,
+        limit: 1,
+      });
+      
+      console.log("📊 نتیجه جستجو:", result.docs.length, "محصول یافت شد"); // اضافه کنید
+      
+      if (!result.docs.length) {
+        // لیست همه slugs برای debug
+        const allProducts = await ctx.db.find({
+          collection: "products",
+          limit: 10,
+          pagination: false,
+        });
+        console.log("📋 موجودی slugs:", allProducts.docs.map(p => p.slug));
+        
+        throw new Error(`محصول با slug "${decodedSlug}" یافت نشد`);
+      }
+      
+      product = result.docs[0];
+    }
+
+    if (!product) {
+      throw new Error("محصول یافت نشد");
+    }
+
+    return {
+      ...product,
+      image: (product.images as { image: Media }[])?.[0]?.image as Media | null,
+    };
+  }),
   getMany: baseProcedure
     .input(
       z.object({
