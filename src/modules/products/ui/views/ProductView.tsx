@@ -5,8 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 
 import { useTRPC } from "@/src/trpc/client";
-import { formatToman } from "@/src/lib/utils";
-import StarRating from "@/src/components/star-rating";
+import { formatToman, toPersianNumber } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
 import { HeartIcon, Share2Icon } from "lucide-react";
 import { Progress } from "@/src/components/ui/progress";
@@ -176,7 +175,7 @@ export default function ProductView({ slug }: { slug: string }) {
                     }`}
                   >
                     {isInStock
-                      ? `✓ موجود در انبار (${selectedInventory.stock} عدد)`
+                      ? `✓ موجود در انبار (${toPersianNumber(selectedInventory.stock)} عدد)`
                       : selectedColor && selectedSize
                         ? "✗ ناموجود"
                         : "لطفا رنگ و سایز را انتخاب کنید"}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { StarIcon } from "lucide-react";
+import { toPersianNumber } from "@/src/lib/utils";
 
 interface ProductCardProps {
   name: string;
@@ -39,7 +40,7 @@ export default function ProductCard({
 
           {hasDiscount && (
             <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-              ٪{discountPercent} تخفیف
+              ٪{toPersianNumber(discountPercent || 0)} تخفیف
             </div>
           )}
 
@@ -70,7 +71,9 @@ export default function ProductCard({
                 ))}
               </div>
               <p className="text-sm text-gray-500 font-medium">
-                {reviewRating} {reviewCount > 0 && `(${reviewCount} نظر)`}
+                {toPersianNumber(reviewRating)}{" "}
+                {reviewCount > 0 &&
+                  `(${toPersianNumber(reviewCount)} نظر)`}{" "}
               </p>
             </div>
           )}
