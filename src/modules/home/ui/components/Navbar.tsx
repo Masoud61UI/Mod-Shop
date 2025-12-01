@@ -2,22 +2,38 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { MenuIcon } from "lucide-react";
+import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { MenuIcon, ShoppingCartIcon } from "lucide-react";
 
 import { cn } from "@/src/lib/utils";
 import { useTRPC } from "@/src/trpc/client";
 import { Button } from "@/src/components/ui/button";
 
-import Navbarsidebar from "./NavbarSidebar";
 import Container from "./Container";
+import Navbarsidebar from "./NavbarSidebar";
 
 interface NavbarItemProps {
   href: string;
   children: React.ReactNode;
   isActive?: boolean;
 }
+
+const CheckoutButton = dynamic(
+  () => import("@/src/modules/checkout/ui/components/CheckoutButton"),
+  {
+    ssr: false,
+    loading: () => (
+      <Button
+        disabled
+        className="bg-white border border-gray-200 py-5 px-3 rounded-md"
+      >
+        <ShoppingCartIcon className="text-gray-500" />{" "}
+      </Button>
+    ),
+  }
+);
 
 const NavbarItem = ({ href, children, isActive }: NavbarItemProps) => {
   return (
@@ -93,29 +109,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex gap-4 items-center">
-            <Button
-              asChild
-              className="relative py-5 px-3 transition-all duration-200 bg-amber-500 hover:bg-amber-600 text-white rounded-m shadow-lg hover:shadow-xl cursor-pointer"
-            >
-              <Link href="/cart">
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                  />
-                </svg>
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white">
-                  ۳
-                </span>
-              </Link>
-            </Button>
+            <CheckoutButton className="relative py-5 px-3 transition-all duration-200 bg-amber-500 hover:bg-amber-600 text-white rounded-md shadow-md hover:shadow-xl cursor-pointer" />
             {session.data?.user ? (
               <Button
                 asChild
@@ -151,3 +145,36 @@ export default function Navbar() {
     </nav>
   );
 }
+
+export const NavbarSkeleton = () => {
+  return (
+    <nav className="h-20 border-b bg-white flex items-center animate-pulse">
+      <div className="container max-w-6xl mx-auto px-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            <div className="h-8 w-32 bg-gray-200 rounded-md"></div>
+          </div>
+
+          <div className="hidden lg:flex items-center gap-6">
+            {[1, 2, 3, 4, 5].map((item) => (
+              <div key={item} className="h-6 w-16 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+
+          <div className="hidden lg:flex gap-4 items-center">
+            <div className="relative">
+              <div className="h-12 w-12 bg-gray-200 rounded-md"></div>
+              <div className="absolute -top-1 -right-1 h-5 w-5 bg-gray-300 rounded-full"></div>
+            </div>
+
+            <div className="h-12 w-32 bg-gray-200 rounded-md"></div>
+          </div>
+
+          <div className="flex lg:hidden items-center">
+            <div className="h-10 w-10 bg-gray-200 rounded-md"></div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};

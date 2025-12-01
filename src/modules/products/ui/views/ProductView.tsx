@@ -1,14 +1,28 @@
 "use client";
 
 import Image from "next/image";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/src/trpc/client";
-import { formatToman, toPersianNumber } from "@/src/lib/utils";
+// import CartButton from "../components/CartButton";
 import { Button } from "@/src/components/ui/button";
 import { HeartIcon, Share2Icon } from "lucide-react";
 import { Progress } from "@/src/components/ui/progress";
+import { formatToman, toPersianNumber } from "@/src/lib/utils";
+
+const CartButton = dynamic(() => import("../components/CartButton"), {
+  ssr: false,
+  loading: () => (
+    <Button
+      disabled
+      className="flex-1 h-12 text-white text-lg font-medium cursor-pointer transition-all bg-purple-600"
+    >
+      🛒 افزودن به سبد خرید
+    </Button>
+  ),
+});
 
 interface Category {
   id: string;
@@ -111,10 +125,10 @@ export default function ProductView({ slug }: { slug: string }) {
   const isInStock = selectedInventory && selectedInventory.stock > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50/30 py-8">
+    <div className="min-h-screen bg-gray-50/30 py-7">
       <div className="container max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 lg:p-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-6 lg:p-13">
             <div className="space-y-4">
               <div className="relative aspect-square rounded-xl bg-gray-50 overflow-hidden">
                 <Image
@@ -126,7 +140,7 @@ export default function ProductView({ slug }: { slug: string }) {
                 />
                 {hasDiscount && (
                   <div className="absolute top-3 left-3 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-                    {data.discountPercent}% تخفیف
+                    ٪{toPersianNumber(data.discountPercent || 0)} تخفیف
                   </div>
                 )}
               </div>
@@ -249,16 +263,13 @@ export default function ProductView({ slug }: { slug: string }) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button
-                  className="flex-1 h-12 bg-purple-600 hover:bg-purple-700 text-white text-lg font-medium cursor-pointer"
-                  disabled={!isInStock}
-                >
-                  {isInStock
-                    ? "🛒 افزودن به سبد خرید"
-                    : selectedColor && selectedSize
-                      ? "ناموجود"
-                      : "لطفا رنگ و سایز انتخاب کنید"}
-                </Button>
+                <CartButton
+                  productId={data.id}
+                  price={hasDiscount ? data.discountPrice! : data.price}
+                  isInStock={!!isInStock}
+                  selectedColor={selectedColor}
+                  selectedSize={selectedSize}
+                />
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
