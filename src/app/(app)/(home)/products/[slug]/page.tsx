@@ -1,4 +1,3 @@
-// src/app/(app)/(home)/products/[slug]/page.tsx
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { getQueryClient, trpc } from "@/src/trpc/server";
 import ProductView from "@/src/modules/products/ui/views/ProductView";
@@ -17,8 +16,7 @@ export default async function page({ params }: Props) {
       trpc.products.getOne.queryOptions({ slug })
     );
   } catch (error) {
-    console.error("❌ خطا در دریافت محصول:", error);
-    notFound(); // صفحه 404 نشون بده
+    notFound();
   }
 
   return (

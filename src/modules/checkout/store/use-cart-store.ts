@@ -17,13 +17,29 @@ interface CartState {
     color?: string,
     size?: string
   ) => void;
-  removeProduct: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeProduct: (productId: string, color?: string, size?: string) => void;
+  updateQuantity: (
+    productId: string,
+    quantity: number,
+    color?: string,
+    size?: string
+  ) => void;
   clearCart: () => void;
   clearAllCarts: () => void;
   getTotalPrice: () => number;
   getTotalItems: () => number;
 }
+
+const createSafeStorage = () => {
+  if (typeof window === "undefined") {
+    return {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    };
+  }
+  return localStorage;
+};
 
 export const useCartStore = create<CartState>()(
   persist(
@@ -65,18 +81,36 @@ export const useCartStore = create<CartState>()(
           }
         }),
 
-      removeProduct: (productId) =>
+      removeProduct: (productId, color, size) =>
         set((state) => ({
-          items: state.items.filter((item) => item.productId !== productId),
+          items: state.items.filter(
+            (item) =>
+              !(
+                item.productId === productId &&
+                item.color === color &&
+                item.size === size
+              )
+          ),
         })),
 
-      updateQuantity: (productId, quantity) =>
+      updateQuantity: (productId, quantity, color, size) =>
         set((state) => ({
           items:
             quantity <= 0
-              ? state.items.filter((item) => item.productId !== productId)
+              ? state.items.filter(
+                  (item) =>
+                    !(
+                      item.productId === productId &&
+                      item.color === color &&
+                      item.size === size
+                    )
+                )
               : state.items.map((item) =>
-                  item.productId === productId ? { ...item, quantity } : item
+                  item.productId === productId &&
+                  item.color === color &&
+                  item.size === size
+                    ? { ...item, quantity }
+                    : item
                 ),
         })),
 
@@ -105,7 +139,7 @@ export const useCartStore = create<CartState>()(
     }),
     {
       name: "shop-cart",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => createSafeStorage()),
     }
   )
 );

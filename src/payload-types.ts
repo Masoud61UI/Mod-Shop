@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     products: Product;
+    'shipping-settings': ShippingSetting;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -85,6 +86,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
+    'shipping-settings': ShippingSettingsSelect<false> | ShippingSettingsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -235,6 +237,20 @@ export interface Product {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shipping-settings".
+ */
+export interface ShippingSetting {
+  id: string;
+  name: string;
+  enabled?: boolean | null;
+  baseCost: number;
+  freeThreshold: number;
+  message?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -255,6 +271,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'products';
         value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'shipping-settings';
+        value: string | ShippingSetting;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -386,6 +406,19 @@ export interface ProductsSelect<T extends boolean = true> {
   sku?: T;
   refundPolicy?: T;
   featured?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shipping-settings_select".
+ */
+export interface ShippingSettingsSelect<T extends boolean = true> {
+  name?: T;
+  enabled?: T;
+  baseCost?: T;
+  freeThreshold?: T;
+  message?: T;
   updatedAt?: T;
   createdAt?: T;
 }

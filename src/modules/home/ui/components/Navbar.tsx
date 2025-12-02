@@ -109,7 +109,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden lg:flex gap-4 items-center">
-            <CheckoutButton className="relative py-5 px-3 transition-all duration-200 bg-amber-500 hover:bg-amber-600 text-white rounded-md shadow-md hover:shadow-xl cursor-pointer" />
+            <CheckoutButton className="relative py-5 px-3 transition-all duration-200 bg-amber-500 hover:bg-amber-600 text-white rounded-md shadow-md cursor-pointer" />
             {session.data?.user ? (
               <Button
                 asChild

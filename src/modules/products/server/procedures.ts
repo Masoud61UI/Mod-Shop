@@ -15,7 +15,6 @@ export const productsRouter = createTRPCRouter({
     })
   )
   .query(async ({ ctx, input }) => {
-    console.log("📥 دریافت درخواست برای:", input); // اضافه کنید
 
     if (!input.id && !input.slug) {
       throw new Error("ایدی یا اسلاگ محصول الزامی است");
@@ -30,31 +29,27 @@ export const productsRouter = createTRPCRouter({
         depth: 2,
       });
     } else if (input.slug) {
-      // decode URL-encoded slug
       const decodedSlug = decodeURIComponent(input.slug);
-      console.log("🔍 جستجو برای slug:", decodedSlug); // اضافه کنید
+      console.log("🔍 جستجو برای slug:", decodedSlug);
 
       const result = await ctx.db.find({
         collection: "products",
         where: {
           slug: {
-            equals: decodedSlug, // از decoded استفاده کنید
+            equals: decodedSlug, 
           },
         },
         depth: 2,
         limit: 1,
       });
       
-      console.log("📊 نتیجه جستجو:", result.docs.length, "محصول یافت شد"); // اضافه کنید
       
       if (!result.docs.length) {
-        // لیست همه slugs برای debug
         const allProducts = await ctx.db.find({
           collection: "products",
           limit: 10,
           pagination: false,
         });
-        console.log("📋 موجودی slugs:", allProducts.docs.map(p => p.slug));
         
         throw new Error(`محصول با slug "${decodedSlug}" یافت نشد`);
       }

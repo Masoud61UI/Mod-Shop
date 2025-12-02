@@ -1,3 +1,5 @@
+"use client";
+
 import { useCartStore } from "../store/use-cart-store";
 
 export const useCart = () => {
@@ -7,28 +9,31 @@ export const useCart = () => {
     removeProduct,
     updateQuantity,
     clearCart,
+    clearAllCarts,
     getTotalPrice,
     getTotalItems,
   } = useCartStore();
 
-  const toggleProduct = (
+  const addToCart = (
     productId: string,
     price: number,
     color?: string,
     size?: string
   ) => {
-    const existingItem = items.find(
-      (item) =>
-        item.productId === productId &&
-        item.color === color &&
-        item.size === size
-    );
+    addProduct(productId, price, color, size);
+  };
 
-    if (existingItem) {
-      removeProduct(productId);
-    } else {
-      addProduct(productId, price, color, size);
-    }
+  const removeFromCart = (productId: string, color?: string, size?: string) => {
+    removeProduct(productId, color, size);
+  };
+
+  const updateItemQuantity = (
+    productId: string,
+    quantity: number,
+    color?: string,
+    size?: string
+  ) => {
+    updateQuantity(productId, quantity, color, size);
   };
 
   const isProductInCart = (
@@ -58,16 +63,23 @@ export const useCart = () => {
     return item ? item.quantity : 0;
   };
 
+  const getTotalQuantity = () => {
+    return items.reduce((total, item) => total + item.quantity, 0);
+  };
+
   return {
     items,
     addProduct,
-    removeProduct,
-    updateQuantity,
+    removeProduct: removeFromCart,
+    updateQuantity: updateItemQuantity,
     clearCart,
-    toggleProduct,
+    clearAllCarts,
+    addToCart,
     isProductInCart,
     getProductQuantity,
+    getTotalQuantity,
     totalPrice: getTotalPrice(),
     totalItems: getTotalItems(),
+    totalQuantity: getTotalQuantity(),
   };
 };

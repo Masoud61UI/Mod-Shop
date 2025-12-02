@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/src/trpc/client";
-// import CartButton from "../components/CartButton";
 import { Button } from "@/src/components/ui/button";
 import { HeartIcon, Share2Icon } from "lucide-react";
 import { Progress } from "@/src/components/ui/progress";
@@ -267,6 +266,7 @@ export default function ProductView({ slug }: { slug: string }) {
                   productId={data.id}
                   price={hasDiscount ? data.discountPrice! : data.price}
                   isInStock={!!isInStock}
+                  availableStock={selectedInventory?.stock}
                   selectedColor={selectedColor}
                   selectedSize={selectedSize}
                 />
