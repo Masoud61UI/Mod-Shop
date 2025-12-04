@@ -14,6 +14,6 @@ export function toPersianNumber(value: number | string): string {
 
   return value.toString().replace(/\d/g, (digit: string) => {
     const num = parseInt(digit);
-    return persianDigits[num] || digit; // اگر مشکلی پیش آمد، عدد اصلی رو برگردون
+    return persianDigits[num] || digit;
   });
 }

@@ -47,12 +47,14 @@ export default function CheckoutItem({
   return (
     <div className={`flex items-center gap-4 p-4 ${!isLast ? "border-b" : ""}`}>
       <div className="relative w-20 h-20 rounded-lg bg-gray-100 overflow-hidden">
-        <Image
-          src={imageUrl || "/no-image2.png"}
-          alt={name}
-          fill
-          className="object-cover"
-        />
+        <Link href={productUrl}>
+          <Image
+            src={imageUrl || "/no-image2.png"}
+            alt={name}
+            fill
+            className="object-cover"
+          />
+        </Link>
       </div>
 
       <div className="flex-1">

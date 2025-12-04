@@ -9,6 +9,7 @@ import sharp from "sharp";
 
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
+import { Orders } from "./collections/Orders";
 import { Products } from "./collections/Products";
 import { Categories } from "./collections/Categories";
 import { ShippingSettings } from "./collections/ShippingSettings";
@@ -23,7 +24,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Categories, Products, ShippingSettings],
+  collections: [Users, Media, Categories, Products, ShippingSettings, Orders],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

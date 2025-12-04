@@ -1,12 +1,12 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import superjson from "superjson";
 import { cache } from "react";
-import { headers } from "next/headers";
+import { headers as getHeaders } from "next/headers";
 
 export const createTRPCContext = cache(async () => {
-  const headersList = await headers();
+  const headersList = await getHeaders();
 
   return {
     userId: "user_123",
@@ -28,7 +28,7 @@ export const createCallerFactory = t.createCallerFactory;
 
 export const baseProcedure = t.procedure.use(async ({ next }) => {
   const payload = await getPayload({ config });
-  const headersList = await headers();
+  const headersList = await getHeaders();
 
   return next({
     ctx: {
@@ -39,6 +39,28 @@ export const baseProcedure = t.procedure.use(async ({ next }) => {
         },
       },
       headers: headersList,
+    },
+  });
+});
+
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  const headers = await getHeaders();
+  const session = await ctx.db.auth({ headers });
+
+  if (!session.user) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Not Authenticated",
+    });
+  }
+
+  return next({
+    ctx: {
+      ...ctx,
+      session: {
+        ...session,
+        user: session.user,
+      },
     },
   });
 });

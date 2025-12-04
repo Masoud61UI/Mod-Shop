@@ -32,13 +32,19 @@ export default function CartButton({
   const isMaxReached = availableStock ? quantity >= availableStock : false;
   const isSingleItemMax = availableStock === 1 && quantity === 1;
 
+  const isActuallyOutOfStock = availableStock === 0 || !isInStock;
+
   const handleAddToCart = () => {
+    if (isActuallyOutOfStock) {
+      return;
+    }
+
     if (
       !isMaxReached &&
-      isInStock &&
       selectedColor &&
       selectedSize &&
-      availableStock
+      availableStock &&
+      availableStock > 0
     ) {
       cart.addToCart(productId, price, selectedColor, selectedSize);
     }
@@ -49,32 +55,36 @@ export default function CartButton({
       return "لطفا رنگ و سایز انتخاب کنید";
     }
 
-    if (!isInStock) {
+    if (isActuallyOutOfStock) {
       return "ناموجود";
     }
 
     if (isInCart) {
       if (isSingleItemMax) {
-        return `اضافه شد! حداکثر موجودی (${toPersianNumber(availableStock!)})`;
+        return `افزوده شد (آخرین موجودی)`;
       }
       if (isMaxReached) {
-        return `اضافه شد! حداکثر موجودی (${toPersianNumber(availableStock!)})`;
+        return `حداکثر ${toPersianNumber(availableStock!)} عدد`;
       }
       return quantity > 1
-        ? `✓ ${toPersianNumber(quantity)} عدد در سبد`
-        : "✓ اضافه شده به سبد";
+        ? `${toPersianNumber(quantity)} عدد در سبد`
+        : "✓ افزوده شده";
+    }
+
+    if (availableStock === 1) {
+      return "🛒 خرید آخرین موجودی";
     }
 
     return "🛒 افزودن به سبد خرید";
   };
 
   const getButtonClassName = () => {
-    if (!isInStock || !selectedColor || !selectedSize) {
+    if (!selectedColor || !selectedSize || isActuallyOutOfStock) {
       return "bg-gray-400 hover:bg-gray-400 cursor-not-allowed";
     }
 
     if (isSingleItemMax || isMaxReached) {
-      return "bg-red-500 hover:bg-red-600 cursor-not-allowed";
+      return "bg-amber-500 hover:bg-amber-600 cursor-not-allowed";
     }
 
     if (isInCart) {
@@ -85,24 +95,28 @@ export default function CartButton({
   };
 
   const isButtonDisabled =
-    !isInStock ||
     !selectedColor ||
     !selectedSize ||
+    isActuallyOutOfStock ||
     isSingleItemMax ||
     isMaxReached;
 
   return (
     <Button
       className={cn(
-        "flex-1 h-12 text-white text-sm md:text-[17px] font-medium cursor-pointer transition-all",
+        "flex-1 h-12 text-white text-sm md:text-[15px] font-medium cursor-pointer transition-all",
         getButtonClassName()
       )}
       onClick={handleAddToCart}
       disabled={isButtonDisabled}
       title={
-        isSingleItemMax || isMaxReached
-          ? `حداکثر ${toPersianNumber(availableStock!)} عدد قابل خرید است`
-          : ""
+        isActuallyOutOfStock
+          ? "این محصول در حال حاضر موجود نیست"
+          : isSingleItemMax || isMaxReached
+            ? `حداکثر ${toPersianNumber(availableStock!)} عدد قابل خرید است`
+            : selectedColor && selectedSize
+              ? `${toPersianNumber(availableStock || 0)} عدد در انبار موجود است`
+              : "لطفا رنگ و سایز را انتخاب کنید"
       }
     >
       {getButtonText()}

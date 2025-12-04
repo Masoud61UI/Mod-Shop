@@ -72,6 +72,7 @@ export interface Config {
     categories: Category;
     products: Product;
     'shipping-settings': ShippingSetting;
+    orders: Order;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -87,6 +88,7 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     'shipping-settings': ShippingSettingsSelect<false> | ShippingSettingsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -251,6 +253,74 @@ export interface ShippingSetting {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  orderNumber: string;
+  status: 'pending' | 'paid' | 'processing' | 'ready_to_ship' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
+  customer: {
+    user?: (string | null) | User;
+    fullName: string;
+    phone: string;
+    email?: string | null;
+    address: string;
+    city: string;
+    postalCode: string;
+    notes?: string | null;
+  };
+  items: {
+    product: string | Product;
+    productName: string;
+    variant?: {
+      colorName?: string | null;
+      size?: string | null;
+      sku?: string | null;
+    };
+    quantity: number;
+    unitPrice: number;
+    totalPrice: number;
+    id?: string | null;
+  }[];
+  pricing: {
+    subtotal: number;
+    /**
+     * هزینه ارسال از CMS دریافت می‌شود
+     */
+    shippingCost: number;
+    discount?: number | null;
+    /**
+     * محاسبه خودکار: (جمع محصولات + هزینه ارسال) - تخفیف
+     */
+    total: number;
+  };
+  shipping?: {
+    method?: string | null;
+    trackingNumber?: string | null;
+    estimatedDelivery?: string | null;
+  };
+  payment: {
+    method: 'zarinpal' | 'bank' | 'cod';
+    /**
+     * شناسه تراکنش دریافتی از زرین‌پال
+     */
+    transactionId?: string | null;
+    /**
+     * کد مرجع پرداخت برای پیگیری
+     */
+    refId?: string | null;
+    paymentDate?: string | null;
+    paymentStatus?: ('pending' | 'success' | 'failed' | 'cancelled' | 'refunded') | null;
+  };
+  metadata?: {
+    ip?: string | null;
+    userAgent?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -275,6 +345,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'shipping-settings';
         value: string | ShippingSetting;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -419,6 +493,75 @@ export interface ShippingSettingsSelect<T extends boolean = true> {
   baseCost?: T;
   freeThreshold?: T;
   message?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  status?: T;
+  customer?:
+    | T
+    | {
+        user?: T;
+        fullName?: T;
+        phone?: T;
+        email?: T;
+        address?: T;
+        city?: T;
+        postalCode?: T;
+        notes?: T;
+      };
+  items?:
+    | T
+    | {
+        product?: T;
+        productName?: T;
+        variant?:
+          | T
+          | {
+              colorName?: T;
+              size?: T;
+              sku?: T;
+            };
+        quantity?: T;
+        unitPrice?: T;
+        totalPrice?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        subtotal?: T;
+        shippingCost?: T;
+        discount?: T;
+        total?: T;
+      };
+  shipping?:
+    | T
+    | {
+        method?: T;
+        trackingNumber?: T;
+        estimatedDelivery?: T;
+      };
+  payment?:
+    | T
+    | {
+        method?: T;
+        transactionId?: T;
+        refId?: T;
+        paymentDate?: T;
+        paymentStatus?: T;
+      };
+  metadata?:
+    | T
+    | {
+        ip?: T;
+        userAgent?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
