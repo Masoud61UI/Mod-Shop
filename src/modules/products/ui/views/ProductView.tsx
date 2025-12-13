@@ -8,8 +8,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/src/trpc/client";
 import { Button } from "@/src/components/ui/button";
 import { HeartIcon, Share2Icon } from "lucide-react";
-import { Progress } from "@/src/components/ui/progress";
 import { formatToman, toPersianNumber } from "@/src/lib/utils";
+import ReviewForms from "../components/ReviewForms";
 
 const CartButton = dynamic(() => import("../components/CartButton"), {
   ssr: false,
@@ -348,68 +348,121 @@ export default function ProductView({ slug }: { slug: string }) {
         </div>
 
         <div className="mt-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="text-center lg:text-right">
-              <div className="inline-flex flex-col items-center lg:items-end">
-                <div className="flex items-baseline gap-1 mb-2">
-                  <span className="text-4xl font-bold text-gray-900">۴.۲</span>
-                  <span className="text-gray-400">/۵</span>
+          <h3 className="text-xl font-bold text-gray-900 mb-6">
+            نظرات کاربران
+          </h3>
+
+          <div className="bg-gray-50 rounded-xl p-6 mb-8">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+              <div className="flex items-center gap-6">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-gray-900">۴.۲</div>
+                  <div className="flex items-center justify-center gap-1 mt-1">
+                    {[1, 2, 3, 4].map((star) => (
+                      <svg
+                        key={star}
+                        className="w-5 h-5 text-amber-500 fill-current"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                    ))}
+                    <svg
+                      className="w-5 h-5 text-amber-500 fill-amber-200"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">از ۱۴۱ نظر</p>
                 </div>
-                <div className="flex items-center gap-1 text-amber-500">
-                  <span className="text-lg font-semibold">۴.۲</span>
-                  <svg className="size-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                  </svg>
+
+                <div className="h-16 w-px bg-gray-200 hidden lg:block"></div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-gray-600">
+                      ۵ ستاره
+                    </div>
+                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-amber-500 rounded-full"
+                        style={{ width: "75%" }}
+                      ></div>
+                    </div>
+                    <div className="text-sm text-gray-500 w-10">۱۰۵</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-gray-600">
+                      ۴ ستاره
+                    </div>
+                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-amber-400 rounded-full"
+                        style={{ width: "15%" }}
+                      ></div>
+                    </div>
+                    <div className="text-sm text-gray-500 w-10">۲۱</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-sm font-medium text-gray-600">
+                      ۳ ستاره
+                    </div>
+                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-amber-300 rounded-full"
+                        style={{ width: "7%" }}
+                      ></div>
+                    </div>
+                    <div className="text-sm text-gray-500 w-10">۱۰</div>
+                  </div>
                 </div>
-                <p className="text-gray-500 text-sm mt-2">
-                  (امتیاز ۱۴۱ خریدار)
-                </p>
               </div>
+
+              <button
+                onClick={() =>
+                  document
+                    .getElementById("review-form")
+                    ?.scrollIntoView({ behavior: "smooth" })
+                }
+                className="px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors whitespace-nowrap"
+              >
+                نوشتن نظر
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="review-form"
+            className="bg-white border border-gray-200 rounded-xl p-6 mb-8"
+          >
+            <ReviewForms productId={data.id} />
+          </div>
+
+          <div className="space-y-6">
+            <div className="flex items-center">
+              <h4 className="text-lg font-semibold text-gray-900">
+                دیدگاه کاربران
+              </h4>
             </div>
 
-            <div className="lg:col-span-2">
-              <div className="space-y-3">
-                {[5, 4, 3, 2, 1].map((stars) => (
-                  <div key={stars} className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 w-20">
-                      <span className="text-sm text-gray-600">{stars}</span>
-                      <div className="flex items-center gap-1 text-amber-500">
-                        <svg
-                          className="size-4 fill-current"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <Progress
-                      value={
-                        stars === 5
-                          ? 75
-                          : stars === 4
-                            ? 15
-                            : stars === 3
-                              ? 7
-                              : stars === 2
-                                ? 2
-                                : 1
-                      }
-                      className="h-2 flex-1 bg-gray-100 -ml-4"
-                    />
-                    <span className="text-sm text-gray-500 w-12 text-left">
-                      {stars === 5
-                        ? "۷۵٪"
-                        : stars === 4
-                          ? "۱۵٪"
-                          : stars === 3
-                            ? "۷٪"
-                            : stars === 2
-                              ? "۲٪"
-                              : "۱٪"}
-                    </span>
-                  </div>
-                ))}
-              </div>
+            <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
+              <div className="text-gray-400 text-5xl mb-4">💬</div>
+              <p className="text-gray-500">
+                هنوز نظری برای این محصول ثبت نشده است.
+              </p>
+              <p className="text-sm text-gray-400 mt-2">
+                اولین نفری باشید که نظر می‌دهد
+              </p>
+            </div>
+
+            <div className="text-center pt-4">
+              <Button
+                variant="outline"
+                className="border-purple-600 text-purple-600 hover:bg-purple-50"
+              >
+                مشاهده همه نظرات
+              </Button>
             </div>
           </div>
         </div>

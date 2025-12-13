@@ -11,12 +11,24 @@ export default async function page({ params }: Props) {
   const { slug } = await params;
   const queryClient = getQueryClient();
 
+  let productId: string;
+
   try {
-    await queryClient.prefetchQuery(
+    const product = await queryClient.fetchQuery(
       trpc.products.getOne.queryOptions({ slug })
     );
+
+    productId = product.id;
   } catch (error) {
     notFound();
+  }
+
+  try {
+    await queryClient.prefetchQuery(
+      trpc.reviews.getOne.queryOptions({ productId })
+    );
+  } catch (error) {
+    console.log("Could not prefetch review:", error);
   }
 
   return (

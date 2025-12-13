@@ -5,9 +5,11 @@ import { productsRouter } from "@/src/modules/products/server/procedures";
 import { checkoutRouter } from "@/src/modules/checkout/server/procedures";
 import { categoriesRouter } from "@/src/modules/categories/server/procedures";
 import { shippingRouter } from "@/src/modules/shipping/shippingRouter";
+import { reviewsRouter } from "@/src/modules/reviews/server/procedures";
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
+  reviews: reviewsRouter,
   products: productsRouter,
   checkout: checkoutRouter,
   shipping: shippingRouter,
