@@ -7,9 +7,11 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 
 import { useTRPC } from "@/src/trpc/client";
 import { Button } from "@/src/components/ui/button";
-import { HeartIcon, Share2Icon } from "lucide-react";
+import { CheckCheckIcon, Share2Icon } from "lucide-react";
 import { formatToman, toPersianNumber } from "@/src/lib/utils";
 import ReviewForms from "../components/ReviewForms";
+import { toast } from "sonner";
+import ReviewsList from "../components/ReviewsList";
 
 const CartButton = dynamic(() => import("../components/CartButton"), {
   ssr: false,
@@ -52,14 +54,19 @@ interface Product {
   category: string | Category;
   subcategory?: string | Category;
   image?: any;
+  reviewRating?: number;
+  reviewCount?: number;
+  ratingDistribution?: Record<number, number>;
 }
 
 export default function ProductView({ slug }: { slug: string }) {
   const trpc = useTRPC();
+
   const { data } = useSuspenseQuery(
     trpc.products.getOne.queryOptions({ slug })
   ) as { data: Product };
 
+  const [isCopied, setIsCopied] = useState(false);
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
 
@@ -174,11 +181,13 @@ export default function ProductView({ slug }: { slug: string }) {
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                       </svg>
                       <span className="text-sm font-semibold text-gray-700">
-                        ۴.۵
+                        {data.reviewRating
+                          ? toPersianNumber(data.reviewRating.toFixed(1))
+                          : "۰"}
                       </span>
                     </div>
                     <span className="text-sm text-gray-400">
-                      (امتیاز ۴ خریدار)
+                      ({toPersianNumber(data.reviewCount || 0)} نظر)
                     </span>
                   </div>
                   <div className="w-px h-6 bg-gray-200"></div>
@@ -222,7 +231,7 @@ export default function ProductView({ slug }: { slug: string }) {
                       key={color.name}
                       onClick={() => {
                         setSelectedColor(color.name);
-                        setSelectedSize(""); // Reset size when color changes
+                        setSelectedSize("");
                       }}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 transition-all cursor-pointer ${
                         selectedColor === color.name
@@ -275,15 +284,22 @@ export default function ProductView({ slug }: { slug: string }) {
                     variant="outline"
                     size="icon"
                     className="h-12 w-12 border-gray-200 hover:bg-gray-50 cursor-pointer"
+                    onClick={() => {
+                      setIsCopied(true);
+                      navigator.clipboard.writeText(window.location.href);
+                      toast.success("لینک صفحه با موفقیت کپی شد.");
+
+                      setTimeout(() => {
+                        setIsCopied(false);
+                      }, 1000);
+                    }}
+                    disabled={isCopied}
                   >
-                    <HeartIcon className="size-5 text-gray-600" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-12 w-12 border-gray-200 hover:bg-gray-50 cursor-pointer"
-                  >
-                    <Share2Icon className="size-5 text-gray-600" />
+                    {isCopied ? (
+                      <CheckCheckIcon className="size-5" />
+                    ) : (
+                      <Share2Icon className="size-5 text-gray-600" />
+                    )}
                   </Button>
                 </div>
               </div>
@@ -330,7 +346,7 @@ export default function ProductView({ slug }: { slug: string }) {
                       </span>
                     </div>
                   )}
-                  <div className="flex justify-between py-2 border-b border-gray-100 text-[15px]">
+                  {/*<div className="flex justify-between py-2 border-b border-gray-100 text-[15px]">
                     <span className="text-gray-500">سیاست مرجوعی</span>
                     <span className="text-gray-900 font-medium">
                       {data.refundPolicy === "30-day" && "۳۰ روز مهلت مرجوعی"}
@@ -340,7 +356,7 @@ export default function ProductView({ slug }: { slug: string }) {
                       {data.refundPolicy === "1-day" && "۱ روز مهلت مرجوعی"}
                       {data.refundPolicy === "no-refunds" && "غیرقابل مرجوع"}
                     </span>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </div>
@@ -356,66 +372,55 @@ export default function ProductView({ slug }: { slug: string }) {
             <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
               <div className="flex items-center gap-6">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-gray-900">۴.۲</div>
+                  <div className="text-4xl font-bold text-gray-900">
+                    {data.reviewRating
+                      ? toPersianNumber(data.reviewRating.toFixed(1))
+                      : "۰"}
+                  </div>
                   <div className="flex items-center justify-center gap-1 mt-1">
-                    {[1, 2, 3, 4].map((star) => (
+                    {[1, 2, 3, 4, 5].map((star) => (
                       <svg
                         key={star}
-                        className="w-5 h-5 text-amber-500 fill-current"
+                        className={`w-5 h-5 ${
+                          star <= Math.floor(data.reviewRating || 0)
+                            ? "text-amber-500 fill-current"
+                            : "text-amber-200 fill-amber-200"
+                        }`}
                         viewBox="0 0 24 24"
                       >
                         <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                       </svg>
                     ))}
-                    <svg
-                      className="w-5 h-5 text-amber-500 fill-amber-200"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
                   </div>
-                  <p className="text-sm text-gray-500 mt-2">از ۱۴۱ نظر</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    از {toPersianNumber(data.reviewCount || 0)} نظر
+                  </p>
                 </div>
-
                 <div className="h-16 w-px bg-gray-200 hidden lg:block"></div>
-
                 <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm font-medium text-gray-600">
-                      ۵ ستاره
-                    </div>
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-amber-500 rounded-full"
-                        style={{ width: "75%" }}
-                      ></div>
-                    </div>
-                    <div className="text-sm text-gray-500 w-10">۱۰۵</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm font-medium text-gray-600">
-                      ۴ ستاره
-                    </div>
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-amber-400 rounded-full"
-                        style={{ width: "15%" }}
-                      ></div>
-                    </div>
-                    <div className="text-sm text-gray-500 w-10">۲۱</div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="text-sm font-medium text-gray-600">
-                      ۳ ستاره
-                    </div>
-                    <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-amber-300 rounded-full"
-                        style={{ width: "7%" }}
-                      ></div>
-                    </div>
-                    <div className="text-sm text-gray-500 w-10">۱۰</div>
-                  </div>
+                  {[5, 4, 3, 2, 1].map((star) => {
+                    const percentage = data.ratingDistribution?.[star] || 0;
+                    return (
+                      <div key={star} className="flex items-center gap-2">
+                        <div className="text-sm font-medium text-gray-600">
+                          {star} ستاره
+                        </div>
+                        <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-amber-500 rounded-full"
+                            style={{ width: `${percentage}%` }}
+                          ></div>
+                        </div>
+                        <div className="text-sm text-gray-500 w-10">
+                          {toPersianNumber(
+                            Math.round(
+                              (percentage * (data.reviewCount || 0)) / 100
+                            )
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -425,7 +430,7 @@ export default function ProductView({ slug }: { slug: string }) {
                     .getElementById("review-form")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="px-6 py-3 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-colors whitespace-nowrap"
+                className="px-6 py-3 text-[15px] bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer"
               >
                 نوشتن نظر
               </button>
@@ -434,7 +439,7 @@ export default function ProductView({ slug }: { slug: string }) {
 
           <div
             id="review-form"
-            className="bg-white border border-gray-200 rounded-xl p-6 mb-8"
+            className="bg-white border border-gray-200 rounded-xl p-6 mb-11"
           >
             <ReviewForms productId={data.id} />
           </div>
@@ -444,26 +449,25 @@ export default function ProductView({ slug }: { slug: string }) {
               <h4 className="text-lg font-semibold text-gray-900">
                 دیدگاه کاربران
               </h4>
+              {(data.reviewCount || 0) > 0 && (
+                <span className="mr-2 text-sm text-gray-500">
+                  ({toPersianNumber(data.reviewCount || 0)} نظر)
+                </span>
+              )}
             </div>
 
-            <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl">
-              <div className="text-gray-400 text-5xl mb-4">💬</div>
-              <p className="text-gray-500">
-                هنوز نظری برای این محصول ثبت نشده است.
-              </p>
-              <p className="text-sm text-gray-400 mt-2">
-                اولین نفری باشید که نظر می‌دهد
-              </p>
-            </div>
+            <ReviewsList productId={data.id} />
 
-            <div className="text-center pt-4">
-              <Button
-                variant="outline"
-                className="border-purple-600 text-purple-600 hover:bg-purple-50"
-              >
-                مشاهده همه نظرات
-              </Button>
-            </div>
+            {(data.reviewCount || 0) > 5 && (
+              <div className="text-center pt-4">
+                <Button
+                  variant="outline"
+                  className="border-purple-600 text-purple-600 hover:bg-purple-50"
+                >
+                  مشاهده همه نظرات
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

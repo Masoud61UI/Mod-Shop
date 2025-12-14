@@ -64,8 +64,8 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
               price={product.price}
               discountPrice={product.discountPrice || undefined}
               discountPercent={product.discountPercent || undefined}
-              reviewRating={4.5}
-              reviewCount={24}
+              reviewRating={product.reviewRating}
+              reviewCount={product.reviewCount}
             />
           ))}
       </div>

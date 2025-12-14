@@ -21,11 +21,13 @@ export default function ProductCard({
   price,
   discountPrice,
   discountPercent,
-  reviewRating = 4.5,
+  reviewRating = 0,
   reviewCount = 0,
 }: ProductCardProps) {
   const finalPrice = discountPrice || price;
   const hasDiscount = discountPrice && discountPrice < price;
+
+  const roundedRating = reviewRating ? Number(reviewRating.toFixed(1)) : 0;
 
   return (
     <Link href={`/products/${slug}`}>
@@ -56,14 +58,14 @@ export default function ProductCard({
             {name}
           </h2>
 
-          {(reviewCount > 0 || reviewRating > 0) && (
+          {(reviewCount > 0 || roundedRating > 0) && (
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <StarIcon
                     key={i}
                     className={`size-4 ${
-                      i < Math.floor(reviewRating)
+                      i < Math.floor(roundedRating)
                         ? "fill-yellow-400 text-yellow-400"
                         : "fill-gray-200 text-gray-200"
                     }`}
@@ -71,7 +73,7 @@ export default function ProductCard({
                 ))}
               </div>
               <p className="text-sm text-gray-500 font-medium">
-                {toPersianNumber(reviewRating)}{" "}
+                {toPersianNumber(roundedRating)}{" "}
                 {reviewCount > 0 &&
                   `(${toPersianNumber(reviewCount)} نظر)`}{" "}
               </p>
