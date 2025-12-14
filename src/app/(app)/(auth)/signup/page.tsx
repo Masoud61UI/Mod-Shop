@@ -4,6 +4,8 @@ import { caller } from "@/src/trpc/server";
 
 import { SignUpView } from "@/src/modules/auth/ui/views/signup-view";
 
+export const dynamic = "force-dynamic";
+
 export default async function page() {
   const session = await caller.auth.session();
 

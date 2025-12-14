@@ -7,6 +7,11 @@ interface Props {
   params: Promise<{ slug: string }>;
 }
 
+export const dynamic = "force-dynamic";
+
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
 export default async function page({ params }: Props) {
   const { slug } = await params;
   const queryClient = getQueryClient();

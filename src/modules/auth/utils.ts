@@ -11,7 +11,8 @@ export const generateAuthCookie = async ({ prefix, value }: Props) => {
   cookies.set(`${prefix}-token`, value, {
     httpOnly: true,
     path: "/",
-    sameSite: "lax",
+    sameSite: "none",
+    domain: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });

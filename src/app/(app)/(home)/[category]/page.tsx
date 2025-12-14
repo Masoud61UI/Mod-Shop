@@ -13,6 +13,8 @@ interface Props {
   searchParams: Promise<SearchParams>;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function page({ params, searchParams }: Props) {
   const { category } = await params;
   const filters = await loadProductsFilters(searchParams);
