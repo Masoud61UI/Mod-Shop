@@ -71,10 +71,7 @@ export default function CategoryDropdown({
         )}
       </div>
 
-      <SubcategoryMenu
-        category={category}
-        isOpen={isOpen}
-      />
+      <SubcategoryMenu category={category} isOpen={isOpen} />
     </div>
   );
 }

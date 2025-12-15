@@ -108,7 +108,6 @@ export default function CheckoutItemsList({
 
       {items.length > 0 && (
         <div className="border-t p-4 space-y-3">
-
           <Button
             variant="outline"
             onClick={clearAllCarts}
