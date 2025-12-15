@@ -113,7 +113,7 @@ export default function Navbar() {
             {session.data?.user ? (
               <Button
                 asChild
-                className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
+                className="p-5 transition-all duration-200 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
               >
                 <Link prefetch href="/admin">
                   پروفایل کاربری
@@ -122,7 +122,7 @@ export default function Navbar() {
             ) : (
               <Button
                 asChild
-                className="p-5 transition-all duration-200 text-sm bg-purple-500 hover:bg-purple-600 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
+                className="p-5 transition-all duration-200 text-sm bg-purple-600 hover:bg-purple-700 text-white rounded-md shadow hover:shadow-md cursor-pointer font-medium"
               >
                 <Link prefetch href="/login">
                   ثبت‌نام / ورود

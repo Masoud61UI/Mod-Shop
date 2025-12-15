@@ -125,7 +125,7 @@ export default function ReviewForm({ productId, initialData }: Props) {
                   `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`
                 )
               }
-              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-medium"
+              className=" bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium"
             >
               ورود به حساب کاربری
             </Button>
@@ -208,7 +208,7 @@ export default function ReviewForm({ productId, initialData }: Props) {
           <Button
             type="submit"
             disabled={isLoading}
-            className="px-8 py-3 bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-md shadow-md transition-all duration-200 w-fit cursor-pointer"
+            className="px-8 py-3  bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md shadow-md transition-all duration-200 w-fit cursor-pointer"
           >
             {isLoading ? (
               <>

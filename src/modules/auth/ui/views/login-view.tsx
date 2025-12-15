@@ -185,7 +185,7 @@ export const LogInView = () => {
               <Button
                 disabled={login.isPending}
                 type="submit"
-                className="w-full bg-purple-500 hover:bg-purple-600 h-12 cursor-pointer transition-all duration-200 font-medium"
+                className="w-full bg-purple-600 hover:bg-purple-700 h-12 cursor-pointer transition-all duration-200 font-medium"
               >
                 {login.isPending ? "در حال ورود..." : "ورود"}
               </Button>
