@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { useTRPC } from "@/src/trpc/client";
 
@@ -9,10 +10,27 @@ import Container from "../Container";
 import Categories from "./categories";
 import SearchInput from "./SearchInput";
 import BreadcrumbNavigation from "./BreadcrumbNavigation";
+import { useProductFilters } from "@/src/modules/products/hooks/use-product-filters";
 
 export const SearchFilters = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [filters, setFilters] = useProductFilters();
+
+  const handleSearchChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    
+    if (value.trim()) {
+      params.set("search", value);
+    } else {
+      params.delete("search");
+    }
+    
+    router.replace(`?${params.toString()}`);
+  };
 
   const params = useParams();
   const categoryParam = params.category as string | undefined;
@@ -37,7 +55,10 @@ export const SearchFilters = () => {
           <Categories data={data} />
         </div>
         <div className="lg:w-[23%] w-full">
-          <SearchInput />
+          <SearchInput
+            defaultValue={searchParams.get("search") || ""}
+            onChange={handleSearchChange}
+          />
         </div>
       </div>
       <BreadcrumbNavigation

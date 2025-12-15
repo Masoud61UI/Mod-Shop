@@ -1,9 +1,8 @@
 "use client";
 
 import { useSuspenseInfiniteQuery } from "@tanstack/react-query";
-
 import { useTRPC } from "@/src/trpc/client";
-
+import { useSearchParams } from "next/navigation";
 import ProductCard, { ProductCardSkeleton } from "./ProductCard";
 import { Button } from "@/src/components/ui/button";
 import { useProductFilters } from "../../hooks/use-product-filters";
@@ -16,13 +15,17 @@ interface Props {
 
 export const ProductList = ({ category, gridLayout = "default" }: Props) => {
   const [filters] = useProductFilters();
+  const searchParams = useSearchParams();
+  const searchValue = searchParams.get("search") || "";
 
   const trpc = useTRPC();
+
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery(
       trpc.products.getMany.infiniteQueryOptions(
         {
           ...filters,
+          search: searchValue,
           category,
           limit: 8,
         },
@@ -39,13 +42,31 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
       ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
       : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4";
 
-  if (data.pages?.[0]?.docs.length === 0) {
+  const hasSearch = searchValue.trim().length > 0;
+  const noProductsFound = data.pages?.[0]?.docs.length === 0;
+
+  if (noProductsFound) {
     return (
       <div className="border border-gray-600 border-dashed flex items-center justify-center p-8 flex-col gap-y-3 bg-white w-full rounded-lg">
-        <InboxIcon className="text-purple-500" />
+        <InboxIcon className="text-purple-500" size={48} />
         <p className="text-base text-gray-800 font-medium">
-          هیچ محصولی یافت نشد!
+          {hasSearch
+            ? `محصولی با عنوان "${searchValue}" یافت نشد!`
+            : "هیچ محصولی یافت نشد!"}
         </p>
+        {hasSearch && (
+          <Button
+            onClick={() => {
+              const params = new URLSearchParams(searchParams.toString());
+              params.delete("search");
+              window.location.href = `?${params.toString()}`;
+            }}
+            variant="outline"
+            className="mt-4"
+          >
+            حذف فیلتر جستجو
+          </Button>
+        )}
       </div>
     );
   }

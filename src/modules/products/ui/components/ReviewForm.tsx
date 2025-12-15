@@ -192,7 +192,11 @@ export default function ReviewForm({ productId, initialData }: Props) {
                   <Textarea
                     placeholder="تجربه خود از خرید این محصول را با دیگران به اشتراک بگذارید..."
                     disabled={isLoading}
-                    className="min-h-[120px] resize-none text-right placeholder:text-right"
+                    className="min-h-[120px] resize-none text-right placeholder:text-right placeholder:text-sm 
+            placeholder:text-gray-300
+            focus-visible:ring-1 
+            focus-visible:ring-purple-200 
+            focus-visible:ring-offset-0"
                     {...field}
                   />
                 </FormControl>

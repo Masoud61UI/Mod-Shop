@@ -1,24 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { ListFilterIcon, SearchIcon } from "lucide-react";
-
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
-
-import { useTRPC } from "@/src/trpc/client";
 import CategoriesSidebar from "./CategoriesSidebar";
 
 interface Props {
   disabled?: boolean;
+  defaultValue?: string | undefined;
+  onChange?: (value: string) => void;
 }
 
-export default function SearchInput({ disabled }: Props) {
+export default function SearchInput({
+  disabled,
+  defaultValue = "",
+  onChange,
+}: Props) {
+  const [searchValue, setSearchValue] = useState(defaultValue);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const trpc = useTRPC();
-  const session = useQuery(trpc.auth.session.queryOptions());
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchValue(value);
+    onChange?.(value);
+  };
 
   return (
     <div className="flex items-center gap-2 w-full">
@@ -34,6 +40,8 @@ export default function SearchInput({ disabled }: Props) {
             focus-visible:ring-offset-0"
           placeholder="جستجو محصولات..."
           disabled={disabled}
+          value={searchValue}
+          onChange={handleChange}
         />
       </div>
 

@@ -129,6 +129,7 @@ export const productsRouter = createTRPCRouter({
       z.object({
         cursor: z.number().default(1),
         limit: z.number().default(8),
+        search: z.string().nullable().optional(),
         category: z.string().nullable().optional(),
         minPrice: z.string().nullable().optional(),
         maxPrice: z.string().nullable().optional(),
@@ -201,6 +202,14 @@ export const productsRouter = createTRPCRouter({
             in: [parentCategory.slug, ...subcategoriesSlugs],
           };
         }
+      }
+
+      if (input.search && input.search.trim()) {
+        const searchTerm = input.search.trim();
+
+        where["name"] = {
+          contains: searchTerm,
+        };
       }
 
       const data = await ctx.db.find({
