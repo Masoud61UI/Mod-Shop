@@ -2,7 +2,7 @@
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloudPlugin } from "@payloadcms/payload-cloud";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
+// import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -15,6 +15,7 @@ import { Reviews } from "./collections/Reviews";
 import { Products } from "./collections/Products";
 import { Categories } from "./collections/Categories";
 import { ShippingSettings } from "./collections/ShippingSettings";
+import { ContactMessages } from "./collections/ContactMessages";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -34,6 +35,7 @@ export default buildConfig({
     ShippingSettings,
     Orders,
     Reviews,
+    ContactMessages,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",
@@ -46,12 +48,12 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    vercelBlobStorage({
-      enabled: true,
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
+    //vercelBlobStorage({
+    //  enabled: true,
+    //  collections: {
+    //    media: true,
+    //  },
+    //  token: process.env.BLOB_READ_WRITE_TOKEN,
+    //}),
   ],
 });

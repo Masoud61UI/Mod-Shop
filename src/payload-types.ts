@@ -74,6 +74,7 @@ export interface Config {
     'shipping-settings': ShippingSetting;
     orders: Order;
     reviews: Review;
+    'contact-messages': ContactMessage;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -91,6 +92,7 @@ export interface Config {
     'shipping-settings': ShippingSettingsSelect<false> | ShippingSettingsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -338,6 +340,26 @@ export interface Review {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages".
+ */
+export interface ContactMessage {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  subject: 'product-support' | 'order-question' | 'collaboration' | 'feedback' | 'other';
+  message: string;
+  status?: ('new' | 'read' | 'replied' | 'archived') | null;
+  read?: boolean | null;
+  productId?: (string | null) | Product;
+  adminNotes?: string | null;
+  repliedAt?: string | null;
+  updatedBy?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -370,6 +392,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reviews';
         value: string | Review;
+      } | null)
+    | ({
+        relationTo: 'contact-messages';
+        value: string | ContactMessage;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -597,6 +623,25 @@ export interface ReviewsSelect<T extends boolean = true> {
   محصول?: T;
   کاربر?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-messages_select".
+ */
+export interface ContactMessagesSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  subject?: T;
+  message?: T;
+  status?: T;
+  read?: T;
+  productId?: T;
+  adminNotes?: T;
+  repliedAt?: T;
+  updatedBy?: T;
   updatedAt?: T;
   createdAt?: T;
 }

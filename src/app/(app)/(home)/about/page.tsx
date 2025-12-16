@@ -1,5 +1,3 @@
-"use client";
-
 import Container from "@/src/modules/home/ui/components/Container";
 import { Separator } from "@/src/components/ui/separator";
 import {
@@ -14,19 +12,13 @@ export default function AboutPage() {
   return (
     <Container>
       <HeroSection />
-
       <Separator className="my-12 md:my-16" />
-
       <ValuesSection />
-
       <TimelineSection />
-
       <Separator className="my-12 md:my-16" />
-
       <TeamSection />
-
       <MissionVisionSection />
-
+      
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -34,8 +26,7 @@ export default function AboutPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "مد کالکشن",
-            description:
-              "فروشگاه آنلاین مد کالکشن - ارائه محصولات با کیفیت و تجربه خرید ساده",
+            description: "فروشگاه آنلاین مد کالکشن - ارائه محصولات با کیفیت و تجربه خرید ساده",
             url: "https://modcollection.ir",
             foundingDate: "2021",
             foundingLocation: {
@@ -65,8 +56,7 @@ export default function AboutPage() {
               email: "info@modcollection.ir",
               availableLanguage: ["Persian"],
             },
-            keywords:
-              "خرید آنلاین, مد کالکشن, فروشگاه اینترنتی, پوشاک, مد, لباس",
+            keywords: "خرید آنلاین, مد کالکشن, فروشگاه اینترنتی, پوشاک, مد, لباس",
             brand: {
               "@type": "Brand",
               name: "مد کالکشن",

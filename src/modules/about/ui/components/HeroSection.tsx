@@ -9,15 +9,15 @@ export default function HeroSection() {
         <SparklesIcon className="h-4 w-4" />
         از ۱۴۰۰ تا امروز
       </div>
-      <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 md:mb-6 tracking-tight">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6 tracking-tight">
         داستان <span className="text-purple-600">مد کالکشن</span>
       </h1>
-      <p className="text-base md:text-lg text-gray-600 mb-6 md:mb-8 leading-relaxed">
+      <p className="text-base text-gray-600 mb-6 md:mb-8 leading-relaxed">
         در سال <span className="font-semibold text-purple-600">۱۴۰۰</span> با یک
         رویا شروع کردیم:
         <span className="font-medium text-purple-600">
           {" "}
-          ایجاد تجربه‌ای متفاوت در خرید پوشاک آنلاین.
+          ایجاد تجربه‌ای متفاوت در خرید پوشاک آنلاین. 
         </span>
         امروز، با افتخار به یکی از معتبرترین پلتفرم‌های مد ایران تبدیل شده‌ایم.
       </p>

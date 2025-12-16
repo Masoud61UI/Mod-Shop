@@ -34,7 +34,7 @@ export default function TeamSection() {
                   <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors">
                     {member.name}
                   </h3>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-purple-50 to-purple-100 text-purple-700 rounded-full text-sm font-semibold border border-purple-200">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-50 to-amber-100 text-purple-600 rounded-full text-sm font-semibold border border-purple-200">
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     {member.role}
                   </div>
