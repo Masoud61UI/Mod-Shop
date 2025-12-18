@@ -16,6 +16,7 @@ import { Products } from "./collections/Products";
 import { Categories } from "./collections/Categories";
 import { ShippingSettings } from "./collections/ShippingSettings";
 import { ContactMessages } from "./collections/ContactMessages";
+import { BlogPosts } from "./collections/BlogPosts";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -36,6 +37,7 @@ export default buildConfig({
     Orders,
     Reviews,
     ContactMessages,
+    BlogPosts,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "",

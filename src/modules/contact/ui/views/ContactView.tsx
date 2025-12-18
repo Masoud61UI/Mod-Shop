@@ -20,6 +20,7 @@ import {
   SupportInfoCard,
 } from "../components";
 import { Loader2 } from "lucide-react";
+import Container from "@/src/modules/home/ui/components/Container";
 
 export const ContactView = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -113,31 +114,33 @@ export const ContactView = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <ContactHeader />
+      <Container>
+        <ContactHeader />
 
-      <div className="container mx-auto px-4 py-8 mt-4">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div className="lg:col-span-1 space-y-6">
-            {!isAuthenticated && <AuthAlert router={router} />}
-            <ContactSidebar />
-            <QuickResponseCard />
-          </div>
+        <div className="py-8 mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            <div className="lg:col-span-1 space-y-6">
+              {!isAuthenticated && <AuthAlert router={router} />}
+              <ContactSidebar />
+              <QuickResponseCard />
+            </div>
 
-          <div className="lg:col-span-2">
-            {isSubmitted ? (
-              <SuccessMessage onReset={() => setIsSubmitted(false)} />
-            ) : (
-              <ContactForm
-                form={form}
-                onSubmit={onSubmit}
-                isAuthenticated={isAuthenticated}
-                isPending={submitContact.isPending}
-              />
-            )}
-            <SupportInfoCard />
+            <div className="lg:col-span-2">
+              {isSubmitted ? (
+                <SuccessMessage onReset={() => setIsSubmitted(false)} />
+              ) : (
+                <ContactForm
+                  form={form}
+                  onSubmit={onSubmit}
+                  isAuthenticated={isAuthenticated}
+                  isPending={submitContact.isPending}
+                />
+              )}
+              <SupportInfoCard />
+            </div>
           </div>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

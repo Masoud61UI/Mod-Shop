@@ -34,7 +34,7 @@ export default function CheckoutSummary({
   onCheckout,
   isLoading = false,
   buttonText = "ادامه فرآیند خرید",
-  buttonDescription = "ضمانت اصالت کالا | خرید بالای ۱,۰۰۰,۰۰۰ تومان رایگان",
+  buttonDescription = "ضمانت اصالت کالا | خرید بالای ۱,۵۰۰,۰۰۰ تومان رایگان",
 }: CheckoutSummaryProps) {
   const total = subtotal + shippingCost;
   const remainingForFreeShipping = getRemainingForFreeShipping(

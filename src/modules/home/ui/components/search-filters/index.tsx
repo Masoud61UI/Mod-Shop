@@ -10,15 +10,12 @@ import Container from "../Container";
 import Categories from "./categories";
 import SearchInput from "./SearchInput";
 import BreadcrumbNavigation from "./BreadcrumbNavigation";
-import { useProductFilters } from "@/src/modules/products/hooks/use-product-filters";
 
 export const SearchFilters = () => {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.categories.getMany.queryOptions());
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  const [filters, setFilters] = useProductFilters();
 
   const handleSearchChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());

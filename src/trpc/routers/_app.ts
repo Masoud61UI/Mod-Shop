@@ -7,9 +7,11 @@ import { categoriesRouter } from "@/src/modules/categories/server/procedures";
 import { shippingRouter } from "@/src/modules/shipping/shippingRouter";
 import { reviewsRouter } from "@/src/modules/reviews/server/procedures";
 import { contactRouter } from "@/src/modules/contact/server/procedures";
+import { blogRouter } from "@/src/modules/blog/server/procedures";
 
 export const appRouter = createTRPCRouter({
   auth: authRouter,
+  blog: blogRouter,
   reviews: reviewsRouter,
   contact: contactRouter,
   products: productsRouter,

@@ -15,15 +15,15 @@ export const shippingRouter = createTRPCRouter({
       return {
         enabled: true,
         baseCost: 70000,
-        freeThreshold: 1000000,
-        message: "خرید بالای ۱,۰۰۰,۰۰۰ تومان رایگان",
+        freeThreshold: 1500000,
+        message: "خرید بالای ۱,۵۰۰,۰۰۰ تومان رایگان",
       };
     } catch (error) {
       return {
         enabled: true,
         baseCost: 70000,
-        freeThreshold: 1000000,
-        message: "خرید بالای ۱,۰۰۰,۰۰۰ تومان رایگان",
+        freeThreshold: 1500000,
+        message: "خرید بالای ۱,۵۰۰,۰۰۰ تومان رایگان",
       };
     }
   }),

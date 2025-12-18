@@ -75,6 +75,7 @@ export interface Config {
     orders: Order;
     reviews: Review;
     'contact-messages': ContactMessage;
+    'blog-posts': BlogPost;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -93,6 +94,7 @@ export interface Config {
     orders: OrdersSelect<false> | OrdersSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'contact-messages': ContactMessagesSelect<false> | ContactMessagesSelect<true>;
+    'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -360,6 +362,60 @@ export interface ContactMessage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts".
+ */
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt?: string | null;
+  contentBlocks?:
+    | {
+        type?: ('text' | 'image' | 'video' | 'gallery' | 'quote' | 'heading') | null;
+        title?: string | null;
+        headingLevel?: ('h2' | 'h3' | 'h4') | null;
+        textContent?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        image?: (string | null) | Media;
+        gallery?:
+          | {
+              image?: (string | null) | Media;
+              caption?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        videoUrl?: string | null;
+        quote?: string | null;
+        quoteAuthor?: string | null;
+        alignment?: ('left' | 'center' | 'right') | null;
+        id?: string | null;
+      }[]
+    | null;
+  featuredImage: string | Media;
+  tags?: ('seasonal-trends' | 'styling' | 'clothing-care' | 'discounts' | 'news')[] | null;
+  readingTime?: number | null;
+  status?: ('draft' | 'pending' | 'published' | 'archived') | null;
+  publishedAt?: string | null;
+  views?: number | null;
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -396,6 +452,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'contact-messages';
         value: string | ContactMessage;
+      } | null)
+    | ({
+        relationTo: 'blog-posts';
+        value: string | BlogPost;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -642,6 +702,45 @@ export interface ContactMessagesSelect<T extends boolean = true> {
   adminNotes?: T;
   repliedAt?: T;
   updatedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog-posts_select".
+ */
+export interface BlogPostsSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  excerpt?: T;
+  contentBlocks?:
+    | T
+    | {
+        type?: T;
+        title?: T;
+        headingLevel?: T;
+        textContent?: T;
+        image?: T;
+        gallery?:
+          | T
+          | {
+              image?: T;
+              caption?: T;
+              id?: T;
+            };
+        videoUrl?: T;
+        quote?: T;
+        quoteAuthor?: T;
+        alignment?: T;
+        id?: T;
+      };
+  featuredImage?: T;
+  tags?: T;
+  readingTime?: T;
+  status?: T;
+  publishedAt?: T;
+  views?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
 }

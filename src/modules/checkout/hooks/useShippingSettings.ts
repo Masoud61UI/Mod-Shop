@@ -15,8 +15,8 @@ export function useShippingSettings() {
   const safeSettings: ShippingSettingsForCalculation = {
     enabled: data?.enabled ?? true,
     baseCost: data?.baseCost ?? 70000,
-    freeThreshold: data?.freeThreshold ?? 1000000,
-    message: data?.message ?? "خرید بالای ۱,۰۰۰,۰۰۰ تومان رایگان",
+    freeThreshold: data?.freeThreshold ?? 1500000,
+    message: data?.message ?? "خرید بالای ۱,۵۰۰,۰۰۰ تومان رایگان",
   };
 
   return {
