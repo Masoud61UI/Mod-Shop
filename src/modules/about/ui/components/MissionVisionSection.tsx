@@ -2,7 +2,7 @@ import { TargetIcon, SparklesIcon, CheckIcon, HeartIcon } from "lucide-react";
 
 export default function MissionVisionSection() {
   return (
-    <section className="mb-16 md:mb-20 lg:mb-24 max-w-4xl mx-auto px-4">
+    <section className="max-w-4xl mx-auto px-4">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl md:rounded-2xl p-5 md:p-6 border border-purple-100 shadow-sm hover:shadow-md transition-all duration-300 cursor-default">
           <div className="flex items-center gap-3 mb-4">

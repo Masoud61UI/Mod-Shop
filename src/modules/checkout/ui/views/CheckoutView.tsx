@@ -198,15 +198,15 @@ export default function CheckoutView({ slug }: CheckoutViewProps) {
   }
 
   return (
-    <div className="bg-gray-50 min-h-[70vh]">
+    <div className="bg-gradient-to-b from-gray-50 to-white min-h-[70vh]">
       <Container>
-        <div className="py-14">
+        <div className="py-10 sm:py-13">
           <ErrorMessage message={errorMessage} type="error" />
           <ErrorMessage message={stockErrorMessage} type="warning" />
 
           <div className="grid grid-cols-1 lg:grid-cols-7 gap-4 lg:gap-16">
             <div className="lg:col-span-4">
-              <h1 className="text-xl font-bold text-gray-900 mb-6">
+              <h1 className="text-xl font-bold text-gray-900 mb-5">
                 سبد خرید شما
               </h1>
 

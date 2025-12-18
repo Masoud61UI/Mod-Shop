@@ -22,8 +22,8 @@ export default function FilterBar({
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div className="flex-1">
         <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 font-medium">
+          <div className="flex items-start sm:items-center gap-3">
+            <span className="text-sm mt-1.5 sm:mt-0 text-gray-500 font-medium">
               دسته‌بندی‌ها:
             </span>
 

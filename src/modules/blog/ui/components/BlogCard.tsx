@@ -56,7 +56,7 @@ export default function BlogCard({
 
         <div className="p-5 flex flex-col gap-4 flex-1">
           <div className="space-y-3">
-            <h2 className="text-xl font-bold text-gray-800 line-clamp-2 leading-relaxed group-hover:text-purple-600 transition-colors">
+            <h2 className="text-xl font-bold text-gray-800 hover:text-purple-600 line-clamp-2 leading-relaxed force-hover-purple transition-colors">
               {title}
             </h2>
 

@@ -56,67 +56,80 @@ export default function CheckoutItemsList({
 
   return (
     <div className="border rounded-lg overflow-hidden bg-white">
-      {items.map((item, index) => {
-        const product = findProductById(item.productId);
-        if (!product) return null;
-
-        const availableStock = getAvailableStockForItem(item);
-
-        return (
-          <CheckoutItem
-            key={`${item.productId}-${item.color || "no-color"}-${item.size || "no-size"}`}
-            id={item.productId}
-            isLast={index === items.length - 1}
-            imageUrl={product.image?.url || undefined}
-            name={product.name}
-            productUrl={`/products/${product.slug || product.id}`}
-            price={product.price}
-            discountPrice={product.discountPrice || undefined}
-            quantity={item.quantity}
-            availableStock={availableStock}
-            color={item.color}
-            size={item.size}
-            onRemove={() => onRemove(item.productId, item.color, item.size)}
-            onIncrease={() => {
-              if (item.quantity < availableStock) {
-                onUpdateQuantity(
-                  item.productId,
-                  item.quantity + 1,
-                  item.color,
-                  item.size
-                );
-                setStockErrorMessage("");
-              } else {
-                setStockErrorMessage(
-                  `حداکثر ${availableStock} عدد از محصول "${product.name}" موجود است`
-                );
-                setTimeout(() => setStockErrorMessage(""), 3000);
-              }
-            }}
-            onDecrease={() => {
-              const newQuantity = Math.max(1, item.quantity - 1);
-              onUpdateQuantity(
-                item.productId,
-                newQuantity,
-                item.color,
-                item.size
-              );
-            }}
-          />
-        );
-      })}
-
-      {items.length > 0 && (
-        <div className="border-t p-4 space-y-3">
-          <Button
-            variant="outline"
-            onClick={clearAllCarts}
-            className="text-red-500 hover:text-red-600 hover:border-red-300 mt-3 mb-1"
-          >
-            <Trash2Icon className="size-4 ml-1" />
-            خالی کردن سبد خرید
-          </Button>
+      {items.length === 0 ? (
+        <div className="p-8 text-center">
+          <div className="text-gray-400 text-lg mb-2">
+            سبد خرید شما خالی است
+          </div>
+          <p className="text-gray-500 text-sm">
+            محصولاتی را به سبد خرید اضافه کنید
+          </p>
         </div>
+      ) : (
+        <>
+          {items.map((item, index) => {
+            const product = findProductById(item.productId);
+            if (!product) return null;
+
+            const availableStock = getAvailableStockForItem(item);
+
+            return (
+              <CheckoutItem
+                key={`${item.productId}-${item.color || "no-color"}-${item.size || "no-size"}`}
+                id={item.productId}
+                isLast={index === items.length - 1}
+                imageUrl={product.image?.url || undefined}
+                name={product.name}
+                productUrl={`/products/${product.slug || product.id}`}
+                price={product.price}
+                discountPrice={product.discountPrice || undefined}
+                quantity={item.quantity}
+                availableStock={availableStock}
+                color={item.color}
+                size={item.size}
+                onRemove={() => onRemove(item.productId, item.color, item.size)}
+                onIncrease={() => {
+                  if (item.quantity < availableStock) {
+                    onUpdateQuantity(
+                      item.productId,
+                      item.quantity + 1,
+                      item.color,
+                      item.size
+                    );
+                    setStockErrorMessage("");
+                  } else {
+                    setStockErrorMessage(
+                      `حداکثر ${availableStock} عدد از محصول "${product.name}" موجود است`
+                    );
+                    setTimeout(() => setStockErrorMessage(""), 3000);
+                  }
+                }}
+                onDecrease={() => {
+                  const newQuantity = Math.max(1, item.quantity - 1);
+                  onUpdateQuantity(
+                    item.productId,
+                    newQuantity,
+                    item.color,
+                    item.size
+                  );
+                }}
+              />
+            );
+          })}
+
+          {items.length > 0 && (
+            <div className="border-t p-4">
+              <Button
+                variant="outline"
+                onClick={clearAllCarts}
+                className="w-full sm:w-auto text-red-500 hover:text-red-600 hover:border-red-300 cursor-pointer text-sm"
+              >
+                <Trash2Icon className="size-4 ml-0.5" />
+                حذف همه محصولات
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

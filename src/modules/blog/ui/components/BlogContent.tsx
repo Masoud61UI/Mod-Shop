@@ -8,7 +8,7 @@ interface BlogContentProps {
   isLoading: boolean;
   activeTag: string;
   hasActiveFilters: boolean;
-  onTagChange: (value: string) => void; 
+  onTagChange: (value: string) => void;
   onClearFilters: () => void;
 }
 
@@ -17,17 +17,16 @@ export default function BlogContent({
   isLoading,
   activeTag,
   hasActiveFilters,
-  onTagChange, 
+  onTagChange,
   onClearFilters,
 }: BlogContentProps) {
   return (
     <div className="lg:col-span-3">
       <FilterBar
-        activeTag={activeTag} 
-        onTagChange={onTagChange} 
+        activeTag={activeTag}
+        onTagChange={onTagChange}
         onClearFilters={onClearFilters}
         hasActiveFilters={hasActiveFilters}
-        totalDocs={blogData?.totalDocs || 0}
       />
 
       <BlogPostsGrid data={blogData} isLoading={isLoading} />

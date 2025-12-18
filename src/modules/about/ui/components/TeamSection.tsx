@@ -25,16 +25,13 @@ export default function TeamSection() {
               className="group relative overflow-hidden bg-white rounded-2xl md:rounded-3xl border border-gray-100 p-6 md:p-8 hover:border-purple-200 hover:shadow-lg transition-all duration-500 cursor-default"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-50 to-transparent opacity-60 rounded-full -translate-y-16 translate-x-16 group-hover:scale-125 transition-transform duration-700"></div>
-              <div className="absolute top-4 right-4 text-5xl md:text-6xl font-bold text-gray-50 z-0">
-                0{index + 1}
-              </div>
 
               <div className="relative z-10">
                 <div className="mb-6">
                   <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 group-hover:text-purple-700 transition-colors">
                     {member.name}
                   </h3>
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-50 to-amber-100 text-purple-600 rounded-full text-sm font-semibold border border-purple-200">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-amber-50 to-amber-50 text-purple-600 rounded-full text-sm font-semibold border border-purple-200">
                     <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                     {member.role}
                   </div>

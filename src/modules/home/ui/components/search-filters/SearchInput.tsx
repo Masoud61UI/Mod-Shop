@@ -27,8 +27,17 @@ export default function SearchInput({
   };
 
   return (
-    <div className="flex items-center gap-2 w-full">
+    <div className="flex items-center gap-2 w-full my-2 sm:my-0">
       <CategoriesSidebar open={isSidebarOpen} onOpenChange={setIsSidebarOpen} />
+
+      <Button
+        variant="outline"
+        className="size-[42px] shrink-0 flex lg:hidden"
+        onClick={() => setIsSidebarOpen(true)}
+      >
+        <ListFilterIcon />
+      </Button>
+
       <div className="relative w-full">
         <SearchIcon className="absolute right-3 top-1/2 -translate-y-1/2 size-4 text-gray-300" />
         <Input
@@ -44,14 +53,6 @@ export default function SearchInput({
           onChange={handleChange}
         />
       </div>
-
-      <Button
-        variant="outline"
-        className="size-[42px] shrink-0 flex lg:hidden"
-        onClick={() => setIsSidebarOpen(true)}
-      >
-        <ListFilterIcon />
-      </Button>
     </div>
   );
 }

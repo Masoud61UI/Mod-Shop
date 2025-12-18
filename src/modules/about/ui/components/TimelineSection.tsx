@@ -35,7 +35,7 @@ export default function TimelineSection() {
                 >
                   <div className="bg-white border border-purple-100 rounded-xl md:rounded-2xl p-5 md:p-6 shadow-sm hover:shadow-md hover:border-purple-200 transition-all duration-300 cursor-default">
                     <div className="flex items-start gap-3 md:gap-4">
-                      <div className="flex-shrink-0 p-2 md:p-3 bg-amber-100 text-purple-600 rounded-lg md:rounded-xl">
+                      <div className="flex-shrink-0 p-2 md:p-3 bg-amber-50 text-purple-600 rounded-lg md:rounded-xl">
                         <IconComponent className="h-4 w-4" />
                       </div>
                       <div>

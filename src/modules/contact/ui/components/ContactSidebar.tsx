@@ -8,7 +8,7 @@ export const ContactSidebar = () => (
 
     <div className="space-y-6">
       <div className="flex items-start gap-3">
-        <div className="bg-amber-100 p-2.5 rounded-lg mt-0.5">
+        <div className="bg-amber-50 p-2.5 rounded-lg mt-0.5">
           <Phone className="h-5 w-5 text-purple-600" />
         </div>
         <div>
@@ -26,16 +26,16 @@ export const ContactSidebar = () => (
       </div>
 
       <div className="flex items-start gap-3">
-        <div className="bg-amber-100 p-2.5 rounded-lg mt-0.5">
+        <div className="bg-amber-50 p-2.5 rounded-lg mt-0.5">
           <Mail className="h-5 w-5 text-purple-600" />
         </div>
         <div>
           <h3 className="font-medium text-gray-700">ایمیل</h3>
           <a
-            href="mailto:modcollection.store@gmail.com"
+            href="mailto:mod.store@gmail.com"
             className="text-gray-600 hover:text-purple-600 transition-colors text-sm"
           >
-            modcollection.store@gmail.com
+            mod.store@gmail.com
           </a>
           <p className="text-xs text-gray-500 mt-1">
             پاسخگویی در کمتر از ۲۴ ساعت
@@ -44,7 +44,7 @@ export const ContactSidebar = () => (
       </div>
 
       <div className="flex items-start gap-3">
-        <div className="bg-amber-100 p-2.5 rounded-lg mt-0.5">
+        <div className="bg-amber-50 p-2.5 rounded-lg mt-0.5">
           <MapPin className="h-5 w-5 text-purple-600" />
         </div>
         <div>
@@ -59,7 +59,7 @@ export const ContactSidebar = () => (
       </div>
 
       <div className="flex items-start gap-3">
-        <div className="bg-amber-100 p-2.5 rounded-lg mt-0.5">
+        <div className="bg-amber-50 p-2.5 rounded-lg mt-0.5">
           <Clock className="h-5 w-5 text-purple-600" />
         </div>
         <div>

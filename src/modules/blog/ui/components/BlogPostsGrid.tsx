@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import BlogCard, { BlogCardSkeleton } from "../components/BlogCard";
+import { BlogCardSkeleton } from "../components/BlogCard";
 import Pagination from "./Pagination";
 
 const DynamicBlogCard = dynamic(() => import("../components/BlogCard"), {

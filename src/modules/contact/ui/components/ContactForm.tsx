@@ -36,7 +36,7 @@ export const ContactForm = ({
   isPending,
 }: ContactFormProps) => (
   <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 md:p-7">
-    <div className="flex justify-between items-center mb-6">
+    <div className="flex justify-between items-center mb-6 gap-2">
       <div>
         <h2 className="text-xl font-semibold text-gray-800">فرم تماس</h2>
         <p className="text-gray-600 mt-1 text-sm">

@@ -29,10 +29,10 @@ export default function BlogDetailActions({ title }: BlogDetailActionsProps) {
   };
 
   return (
-    <div className="flex items-center justify-between mb-8 py-5 px-6 bg-white rounded-xl border border-gray-200">
+    <div className="flex items-center justify-between py-3 px-3 sm:py-5 sm:px-6 bg-white rounded-xl border border-gray-200">
       <span className="text-sm md:text-base text-gray-600">اشتراک گذاری:</span>
 
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center justify-center gap-4 flex-wrap">
         <Button
           variant="outline"
           size="sm"

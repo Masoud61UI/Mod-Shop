@@ -3,10 +3,6 @@
 import { Suspense } from "react";
 import CheckoutView from "@/src/modules/checkout/ui/views/CheckoutView";
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
 export default function CheckoutPage() {
   return (
     <Suspense

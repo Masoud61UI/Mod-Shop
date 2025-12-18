@@ -32,7 +32,7 @@ export const LogInView = () => {
 
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  
+
   const login = useMutation(
     trpc.auth.login.mutationOptions({
       onError: (error) => {
@@ -202,6 +202,15 @@ export const LogInView = () => {
                 ثبت نام کنید
               </Link>
             </p>
+          </div>
+
+          <div className="text-center lg:hidden">
+            <Link
+              href="/"
+              className="text-sm text-center text-gray-600 border border-gray-200 px-3 py-2 rounded-md"
+            >
+              بازگشت به صفحه اصلی
+            </Link>
           </div>
 
           <div className="text-center mt-3">

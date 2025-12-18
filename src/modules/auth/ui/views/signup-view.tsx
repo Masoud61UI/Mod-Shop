@@ -205,6 +205,15 @@ export const SignUpView = () => {
             </p>
           </div>
 
+          <div className="text-center lg:hidden">
+            <Link
+              href="/"
+              className="text-sm text-center text-gray-600 border border-gray-200 px-3 py-2 rounded-md"
+            >
+              بازگشت به صفحه اصلی
+            </Link>
+          </div>
+
           <div className="text-center mt-3">
             <p className="text-sm text-gray-400">
               ثبت نام در مد کالکشن

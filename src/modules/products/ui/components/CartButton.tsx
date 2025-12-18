@@ -72,10 +72,10 @@ export default function CartButton({
     }
 
     if (availableStock === 1) {
-      return "🛒 خرید آخرین موجودی";
+      return "خرید آخرین موجودی";
     }
 
-    return "🛒 افزودن به سبد خرید";
+    return "افزودن به سبد خرید";
   };
 
   const getButtonClassName = () => {

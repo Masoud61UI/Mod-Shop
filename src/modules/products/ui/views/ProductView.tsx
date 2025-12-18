@@ -20,7 +20,7 @@ const CartButton = dynamic(() => import("../components/CartButton"), {
       disabled
       className="flex-1 h-12 text-white text-lg font-medium cursor-pointer transition-all bg-purple-600"
     >
-      🛒 افزودن به سبد خرید
+      افزودن به سبد خرید
     </Button>
   ),
 });
@@ -131,7 +131,7 @@ export default function ProductView({ slug }: { slug: string }) {
   const isInStock = selectedInventory && selectedInventory.stock > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50/30 py-7">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-7">
       <div className="container max-w-6xl mx-auto px-4">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mt-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 p-6 lg:p-13">
@@ -270,7 +270,7 @@ export default function ProductView({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
+              <div className="flex items-center gap-3">
                 <CartButton
                   productId={data.id}
                   price={hasDiscount ? data.discountPrice! : data.price}
@@ -368,20 +368,20 @@ export default function ProductView({ slug }: { slug: string }) {
             نظرات کاربران
           </h3>
 
-          <div className="bg-gray-50 rounded-xl p-6 mb-8">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-              <div className="flex items-center gap-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-gray-900">
+          <div className="bg-gray-50 rounded-xl p-4 md:p-6 mb-8">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 w-full">
+                <div className="text-center sm:text-right w-full sm:w-auto">
+                  <div className="text-3xl md:text-4xl font-bold text-gray-900">
                     {data.reviewRating
                       ? toPersianNumber(data.reviewRating.toFixed(1))
                       : "۰"}
                   </div>
-                  <div className="flex items-center justify-center gap-1 mt-1">
+                  <div className="flex items-center justify-center sm:justify-start gap-1 mt-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <svg
                         key={star}
-                        className={`w-5 h-5 ${
+                        className={`w-4 h-4 md:w-5 md:h-5 ${
                           star <= Math.floor(data.reviewRating || 0)
                             ? "text-amber-500 fill-current"
                             : "text-amber-200 fill-amber-200"
@@ -396,22 +396,24 @@ export default function ProductView({ slug }: { slug: string }) {
                     از {toPersianNumber(data.reviewCount || 0)} نظر
                   </p>
                 </div>
-                <div className="h-16 w-px bg-gray-200 hidden lg:block"></div>
-                <div className="space-y-1">
+
+                <div className="h-px w-full sm:w-px sm:h-16 bg-gray-200 my-4 sm:my-0"></div>
+
+                <div className="space-y-2 w-full">
                   {[5, 4, 3, 2, 1].map((star) => {
                     const percentage = data.ratingDistribution?.[star] || 0;
                     return (
                       <div key={star} className="flex items-center gap-2">
-                        <div className="text-sm font-medium text-gray-600">
+                        <div className="text-xs sm:text-sm font-medium text-gray-600 w-16 sm:w-auto">
                           {star} ستاره
                         </div>
-                        <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden min-w-0">
                           <div
                             className="h-full bg-amber-500 rounded-full"
                             style={{ width: `${percentage}%` }}
                           ></div>
                         </div>
-                        <div className="text-sm text-gray-500 w-10">
+                        <div className="text-xs sm:text-sm text-gray-500 w-8 sm:w-10 text-left">
                           {toPersianNumber(
                             Math.round(
                               (percentage * (data.reviewCount || 0)) / 100
@@ -430,7 +432,7 @@ export default function ProductView({ slug }: { slug: string }) {
                     .getElementById("review-form")
                     ?.scrollIntoView({ behavior: "smooth" })
                 }
-                className="px-6 py-3 text-[15px] bg-purple-500 hover:bg-purple-600 text-white font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer"
+                className="px-4 py-2.5 md:px-6 md:py-3 text-sm md:text-[15px] bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer w-full sm:w-auto mt-4 sm:mt-0"
               >
                 نوشتن نظر
               </button>

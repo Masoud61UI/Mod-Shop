@@ -29,12 +29,10 @@ export default function CheckoutSummary({
   subtotal,
   shippingCost,
   isFreeShipping,
-  shippingMessage,
   freeThreshold,
   onCheckout,
   isLoading = false,
   buttonText = "ادامه فرآیند خرید",
-  buttonDescription = "ضمانت اصالت کالا | خرید بالای ۱,۵۰۰,۰۰۰ تومان رایگان",
 }: CheckoutSummaryProps) {
   const total = subtotal + shippingCost;
   const remainingForFreeShipping = getRemainingForFreeShipping(
@@ -55,24 +53,23 @@ export default function CheckoutSummary({
             {toPersianNumber(totalQuantity)} عدد
           </span>
         </div>
-
         <div className="flex justify-between items-center py-3 border-t border-gray-100">
           <span className="text-gray-700">جمع کل محصولات</span>
           <span className="font-medium text-gray-900">
             {formatToman(subtotal)} تومان
           </span>
         </div>
-
         <div className="flex justify-between items-center py-3 border-t border-gray-100">
           <span className="text-gray-700">هزینه ارسال</span>
           <span
-            className={`font-medium ${isFreeShipping ? "text-green-600" : "text-gray-900"}`}
+            className={`font-medium ${isFreeShipping && subtotal > 0 ? "text-green-600" : "text-gray-900"}`}
           >
-            {isFreeShipping ? "رایگان" : `${formatToman(shippingCost)} تومان`}
+            {isFreeShipping && subtotal > 0
+              ? "رایگان"
+              : `${formatToman(shippingCost)} تومان`}
           </span>
         </div>
-
-        {!isFreeShipping && subtotal < freeThreshold && (
+        {!isFreeShipping && subtotal > 0 && subtotal < freeThreshold && (
           <div className="bg-gray-50 border border-blue-100 rounded-lg p-4 mt-4">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
@@ -102,7 +99,7 @@ export default function CheckoutSummary({
           </div>
         )}
 
-        {isFreeShipping && (
+        {isFreeShipping && subtotal > 0 && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">

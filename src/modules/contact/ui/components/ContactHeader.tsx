@@ -1,7 +1,7 @@
 import { Phone } from "lucide-react";
 
 export const ContactHeader = () => (
-  <div className="pt-12 pb-4 md:py-18 md:pb-9 lg:pt-24 lg:pb-14 text-center max-w-4xl mx-auto px-4 border-b border-gray-200">
+  <div className="pt-12 pb-12 md:py-18 md:pb-9 lg:pt-24 lg:pb-14 text-center max-w-4xl mx-auto px-4 border-b border-gray-200">
     <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-600 rounded-full text-sm font-medium mb-6 cursor-default">
       <Phone className="h-4 w-4" />
       پشتیبانی اختصاصی

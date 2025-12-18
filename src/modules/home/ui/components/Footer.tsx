@@ -1,9 +1,12 @@
+import Link from "next/link";
+import { ShoppingBag, Mail, Phone, MapPin } from "lucide-react";
+
 export default function Footer() {
   const menuItems = [
     { href: "/products", label: "محصولات" },
-    { href: "/about", label: "درباره‌ما" },
-    { href: "/contact", label: "تماس‌باما" },
-    { href: "/privacy", label: "حریم خصوصی" },
+    { href: "/blog", label: "وبلاگ" },
+    { href: "/about", label: "درباره ما" },
+    { href: "/contact", label: "تماس با ما" },
   ];
 
   const socialMedias = [
@@ -36,48 +39,151 @@ export default function Footer() {
     },
   ];
 
-  return (
-    <footer className="bg-white border-t border-gray-200 mt-16">
-      <div className="py-8 container mx-auto px-4 sm:px-6 lg:px-0">
-        <div className="flex flex-col items-center text-center">
-          <a href="/" className="text-xl font-bold text-purple-600">
-            مد کالکشن
-          </a>
+  const contactInfo = [
+    {
+      icon: <Phone className="size-4" />,
+      text: "۶۱۸۱ ۷۱۸ ۰۹۱۱",
+      href: "tel:+989117186181",
+    },
+    {
+      icon: <Mail className="size-4" />,
+      text: "mod.store@gmail.com",
+      href: "mailto:info@modcollection.ir",
+    },
+    {
+      icon: <MapPin className="size-4" />,
+      text: "مازندران، رویان، مجتمع الماس",
+    },
+  ];
 
-          <div className="flex flex-wrap justify-center mt-6 -mx-4">
-            {menuItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="mx-4 text-sm text-gray-500 hover:text-gray-800  transition-colors duration-300"
-              >
-                {item.label}
-              </a>
-            ))}
+  return (
+    <footer className="bg-white border-t border-gray-100 mt-16">
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="flex flex-col items-center text-center mb-10">
+          <Link href="/" className="flex items-center gap-3 group mb-4">
+            <div className="relative">
+              <div className="size-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center shadow-sm">
+                <ShoppingBag className="size-6 text-white" />
+              </div>
+              <div className="absolute -bottom-1 -right-1 size-3 bg-gradient-to-br from-amber-500 to-amber-600 rounded-full border-2 border-white shadow"></div>
+            </div>
+            <div className="flex flex-col items-start">
+              <span className="text-xl font-bold text-gray-900">مدکالکشن</span>
+              <span className="text-xs text-gray-500 font-medium">
+                فروشگاه مد و پوشاک
+              </span>
+            </div>
+          </Link>
+
+          <p className="text-gray-600 max-w-md text-sm leading-relaxed mt-1">
+            فروشگاه آنلاین مد و پوشاک با ارائه جدیدترین ترندهای روز دنیا و کیفیت
+            بی‌نظیر
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              لینک‌های سریع
+            </h3>
+            <ul className="space-y-3">
+              {menuItems.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-gray-600 hover:text-purple-600 text-sm transition-colors flex items-center gap-2 group"
+                  >
+                    <div className="w-1.5 h-1.5 bg-gray-300 rounded-full group-hover:bg-purple-500 transition-colors"></div>
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              ارتباط با ما
+            </h3>
+            <ul className="space-y-4">
+              {contactInfo.map((info, index) => (
+                <li key={index} className="flex items-center gap-3">
+                  <div className="text-purple-600">{info.icon}</div>
+                  {info.href ? (
+                    <a
+                      href={info.href}
+                      className="text-gray-600 hover:text-purple-600 text-sm transition-colors"
+                    >
+                      {info.text}
+                    </a>
+                  ) : (
+                    <span className="text-gray-600 text-sm">{info.text}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              شبکه‌های اجتماعی
+            </h3>
+            <p className="text-gray-600 text-sm mb-4">
+              ما را در شبکه‌های اجتماعی دنبال کنید
+            </p>
+            <div className="flex gap-4">
+              {socialMedias.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="size-10 rounded-lg border border-gray-200 flex items-center justify-center text-gray-600 hover:text-white hover:bg-purple-600 hover:border-purple-600 transition-all duration-300 group"
+                  aria-label={social.label}
+                  title={social.label}
+                >
+                  <div className="group-hover:scale-110 transition-transform">
+                    {social.icon}
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
-        <hr className="my-6 border-gray-200 md:my-10" />
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent my-8"></div>
 
-        <div className="flex flex-col items-center sm:flex-row sm:justify-between">
-          <p className="text-sm text-gray-400 text-center sm:text-right">
-            مد کالکشن ۱۴۰۳ - کلیه حقوق محفوظ است.
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-gray-500 text-center md:text-right">
+            © ۱۴۰۳ مدکالکشن. کلیه حقوق این سایت محفوظ است.
           </p>
 
-          <div className="flex mt-4 -mx-2 sm:mt-0">
-            {socialMedias.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mx-2 text-gray-500 transition-colors duration-300 hover:text-purple-500"
-                aria-label={social.label}
-              >
-                {social.icon}
-              </a>
-            ))}
+          <div className="flex items-center gap-6">
+            <Link
+              href="/privacy"
+              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              حریم خصوصی
+            </Link>
+            <Link
+              href="/terms"
+              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              قوانین و مقررات
+            </Link>
+            <Link
+              href="/faq"
+              className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              سوالات متداول
+            </Link>
           </div>
+        </div>
+
+        <div className="mt-8 pt-6 border-t border-gray-100">
+          <p className="text-xs text-gray-400 text-center">
+            طراحی و توسعه با ❤️ برای علاقه‌مندان به مد و پوشاک
+          </p>
         </div>
       </div>
     </footer>

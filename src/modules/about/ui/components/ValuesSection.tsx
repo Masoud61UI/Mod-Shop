@@ -17,11 +17,11 @@ export default function ValuesSection() {
           return (
             <div
               key={index}
-              className="group p-4 md:p-6 border border-gray-100 rounded-xl md:rounded-2xl hover:border-purple-200 hover:shadow-lg transition-all duration-300 bg-white cursor-default"
+              className="group p-4 md:p-6 border border-gray-100 bg-gray-50 rounded-xl md:rounded-2xl hover:border-purple-200 hover:shadow-md transition-all duration-300 cursor-default"
             >
               <div className="flex items-center gap-3 mb-3 md:mb-4">
                 <div
-                  className={`p-2 ${value.bgColor} ${value.iconColor} rounded-lg md:rounded-xl group-hover:scale-110 transition-transform duration-300`}
+                  className={`p-2 ${value.bgColor} ${value.iconColor} rounded-lg border border-purple-200 md:rounded-xl group-hover:scale-110 transition-transform duration-300`}
                 >
                   <IconComponent className="h-5 w-5" />
                 </div>

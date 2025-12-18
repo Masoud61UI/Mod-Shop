@@ -38,10 +38,10 @@ export default function BlogDetailHero({ post }: BlogDetailHeroProps) {
       <div className="px-4">
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className="mb-4 md:mb-6">
-            <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 md:flex-wrap md:justify-center md:overflow-visible">
+            <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 md:flex-wrap justify-center md:overflow-visible">
               {post.tags.map((tag: string) => (
                 <span
-                  className="inline-flex items-center px-3 py-1.5 bg-amber-50 text-purple-700 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 border border-purple-300 hover:bg-purple-100 transition-colors"
+                  className="inline-flex items-center px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full text-xs font-medium whitespace-nowrap flex-shrink-0 border border-purple-300 hover:bg-purple-100 transition-colors"
                   key={tag}
                 >
                   {getTagLabel(tag)}
@@ -51,11 +51,11 @@ export default function BlogDetailHero({ post }: BlogDetailHeroProps) {
           </div>
         )}
 
-        <h1 className="text-[22px] md:text-[28px] lg:text-[34px] font-bold text-gray-800 mb-4 md:mb-6 leading-tight text-center">
+        <h1 className="text-[22px] md:text-[28px] lg:text-[34px] font-bold text-gray-800 mb-4 md:mb-6 leading-snug text-center">
           {post.title}
         </h1>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-gray-600">
+        <div className="hidden md:flex flex-col md:flex-row items-center justify-center gap-4 text-gray-600">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 md:h-5 md:w-5 flex-shrink-0" />
             <span className="text-sm md:text-[15px]">
@@ -82,8 +82,8 @@ export default function BlogDetailHero({ post }: BlogDetailHeroProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mt-4 md:hidden">
-          <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-2 mt-5 md:hidden">
+          <div className="flex flex-col items-center p-2 bg-gray-100 rounded-lg">
             <Calendar className="h-4 w-4 mb-1" />
             <span className="text-xs text-gray-600">تاریخ</span>
             <span className="text-sm font-medium mt-1">
@@ -91,7 +91,7 @@ export default function BlogDetailHero({ post }: BlogDetailHeroProps) {
             </span>
           </div>
 
-          <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center p-2 bg-gray-100 rounded-lg">
             <Clock className="h-4 w-4 mb-1" />
             <span className="text-xs text-gray-600">زمان</span>
             <span className="text-sm font-medium mt-1">
@@ -99,7 +99,7 @@ export default function BlogDetailHero({ post }: BlogDetailHeroProps) {
             </span>
           </div>
 
-          <div className="flex flex-col items-center p-2 bg-gray-50 rounded-lg">
+          <div className="flex flex-col items-center p-2 bg-gray-100 rounded-lg">
             <Eye className="h-4 w-4 mb-1" />
             <span className="text-xs text-gray-600">بازدید</span>
             <span className="text-sm font-medium mt-1">{post.views}</span>
