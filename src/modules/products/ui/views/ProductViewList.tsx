@@ -24,7 +24,7 @@ export default function ProductViewList({
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-6 xl:grid-cols-8 gap-y-6 gap-x-11">
+      <div className="grid grid-cols-1 lg:grid-cols-7 xl:grid-cols-9 gap-y-6 gap-x-8">
         {showFilters && (
           <div className="lg:col-span-2 xl:col-span-2">
             <ProductFilters />
@@ -33,19 +33,13 @@ export default function ProductViewList({
 
         <div
           className={
-            showFilters ? "lg:col-span-4 xl:col-span-6" : "lg:col-span-full"
+            showFilters ? "lg:col-span-5 xl:col-span-7" : "lg:col-span-full"
           }
         >
-          <Suspense
-            fallback={
-              <ProductListSkeleton
-                gridLayout={showFilters ? "default" : "home"}
-              />
-            }
-          >
+          <Suspense fallback={<ProductListSkeleton />}>
             <ProductList
               category={category}
-              gridLayout={showFilters ? "default" : "home"}
+              gridLayout="default"
             />
           </Suspense>
         </div>

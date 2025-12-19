@@ -7,6 +7,7 @@ export const categoriesRouter = createTRPCRouter({
       collection: "categories",
       depth: 1,
       pagination: false,
+      sort: "order", 
       where: {
         parent: {
           exists: false,

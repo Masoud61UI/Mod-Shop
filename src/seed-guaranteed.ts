@@ -5,16 +5,36 @@ const categories = [
     name: "لباس مردانه",
     color: "#f3f4f6",
     slug: "menproducts",
+    order: 1,
     subcategories: [
-      { name: "تیشرت مردانه", slug: "menshirt" },
-      { name: "شلوار مردانه", slug: "menpants" },
+      { name: "تیشرت مردانه", slug: "menshirt", order: 1 },
+      { name: "شلوار مردانه", slug: "menpants", order: 2 },
+      { name: "هودی مردانه", slug: "menhoodie", order: 3 },
     ],
   },
   {
-    name: "لباس زنانه",
-    color: "#fdf2f8",
+    name: "لباس زنانه", 
+    color: "#f3f4f6",
     slug: "womenproducts",
-    subcategories: [{ name: "شلوار زنانه", slug: "womenpant" }],
+    order: 2,
+    subcategories: [
+      { name: "شلوار زنانه", slug: "womenpant", order: 1 },
+      { name: "بلوز زنانه", slug: "womenblouse", order: 2 },
+      { name: "دامن زنانه", slug: "womenskirt", order: 3 },
+    ],
+  },
+  {
+    name: "اکسسوری", 
+    color: "#f3f4f6",
+    slug: "accessories",
+    order: 3,
+    subcategories: [
+      { name: "عینک آفتابی", slug: "sunglasses", order: 1 },
+      { name: "ساعت مچی", slug: "watch", order: 2 },
+      { name: "کیف دستی", slug: "handbag", order: 3 },
+      { name: "کمربند", slug: "belt", order: 4 },
+      { name: "جواهرات", slug: "jewelry", order: 5 },
+    ],
   },
 ];
 
@@ -35,6 +55,7 @@ const seedCategories = async () => {
         name: category.name,
         slug: category.slug,
         color: category.color,
+        order: category.order,
         parent: null,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -45,6 +66,7 @@ const seedCategories = async () => {
           await categoriesCollection.insertOne({
             name: subCategory.name,
             slug: subCategory.slug,
+            order: subCategory.order,
             parent: parentResult.insertedId,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -52,16 +74,20 @@ const seedCategories = async () => {
         }
       }
     }
-
-    const allCategories = await categoriesCollection.find({}).toArray();
+    
+    const allCategories = await categoriesCollection
+      .find({ parent: null })
+      .sort({ order: 1 })
+      .toArray();
+    
     allCategories.forEach((cat) => {
-      console.log(`   - ${cat.name} (${cat.slug})`);
+      console.log(`   👉 ${cat.name} (${cat.slug}) - order: ${cat.order}`);
     });
+    
   } catch (error) {
     console.error("❌ Seed با خطا مواجه شد:", error);
   } finally {
     await client.close();
-    console.log("🔌 ارتباط با MongoDB بسته شد");
   }
 };
 

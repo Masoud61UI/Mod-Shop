@@ -239,7 +239,7 @@ export default function ReviewForm({ productId, initialData }: Props) {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <p className="text-green-800 font-medium">.نظر شما ثبت شد</p>
+                  <p className="text-green-800 font-medium">نظر شما ثبت شد!</p>
                   <p className="text-green-600 text-sm mt-1">
                     نظر شما با موفقیت ثبت شد و تا دقایقی دیگر در صفحه محصول
                     نمایش داده خواهد شد.

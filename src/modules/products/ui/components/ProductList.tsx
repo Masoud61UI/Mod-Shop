@@ -39,8 +39,8 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
 
   const gridClass =
     gridLayout === "home"
-      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
-      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4";
+      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5"
+      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5";
 
   const hasSearch = searchValue.trim().length > 0;
   const noProductsFound = data.pages?.[0]?.docs.length === 0;
@@ -112,9 +112,7 @@ export const ProductListSkeleton = ({
   gridLayout?: "default" | "home";
 }) => {
   const gridClass =
-    gridLayout === "home"
-      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4"
-      : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4";
+    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5";
 
   return (
     <div className={gridClass}>

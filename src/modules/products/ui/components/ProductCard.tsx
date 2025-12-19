@@ -32,7 +32,7 @@ export default function ProductCard({
   return (
     <Link href={`/products/${slug}`}>
       <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-purple-200 h-full flex flex-col">
-        <div className="relative aspect-[4/5] overflow-hidden bg-gray-100">
+        <div className="relative aspect-[4/4] overflow-hidden bg-gray-100">
           <Image
             alt={name}
             fill
@@ -54,7 +54,7 @@ export default function ProductCard({
         </div>
 
         <div className="p-4 flex flex-col gap-3 flex-1">
-          <h2 className="text-lg font-semibold text-gray-800 line-clamp-2 leading-relaxed group-hover:text-gray-600 transition-colors">
+          <h2 className="text-base font-semibold text-gray-800 line-clamp-2 leading-relaxed group-hover:text-gray-600 transition-colors">
             {name}
           </h2>
 
@@ -80,15 +80,24 @@ export default function ProductCard({
             </div>
           )}
 
-          <div className="flex items-center gap-[10px] mt-auto">
+          <div className="flex items-center gap-2">
             {hasDiscount && (
-              <p className="text-sm text-gray-400 line-through">
+              <div className="flex items-center text-[13px] text-gray-400 line-through mb-0.5">
                 {new Intl.NumberFormat("fa-IR").format(price)} تومان
-              </p>
+              </div>
             )}
-            <p className="text-lg font-bold text-purple-600">
-              {new Intl.NumberFormat("fa-IR").format(finalPrice)} تومان
-            </p>
+            <div className="flex items-center gap-1">
+              <span
+                className={`font-bold ${hasDiscount ? "text-purple-600 text-base" : "text-purple-600 text-base"}`}
+              >
+                {new Intl.NumberFormat("fa-IR").format(finalPrice)}
+              </span>
+              <span
+                className={`${hasDiscount ? "text-purple-600 text-[13px]" : "text-purple-600 text-[13px]"}`}
+              >
+                تومان
+              </span>
+            </div>
           </div>
         </div>
       </div>

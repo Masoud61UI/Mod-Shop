@@ -134,6 +134,7 @@ export const productsRouter = createTRPCRouter({
         minPrice: z.string().nullable().optional(),
         maxPrice: z.string().nullable().optional(),
         sort: z.enum(sortValues).nullable().optional(),
+        featured: z.boolean().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -142,13 +143,7 @@ export const productsRouter = createTRPCRouter({
 
       if (input.sort === "جدیدترین") {
         sort = "-createdAt";
-      }
-
-      if (input.sort === "پرفروش‌ترین") {
-        sort = "-createdAt";
-      }
-
-      if (input.sort === "قدیمی‌ترین") {
+      } else if (input.sort === "قدیمی‌ترین") {
         sort = "+createdAt";
       }
 
@@ -167,11 +162,17 @@ export const productsRouter = createTRPCRouter({
         };
       }
 
+      if (input.featured) {
+        where.featured = {
+          equals: true,
+        };
+      }
+
       if (input.category) {
         const categoryData = await ctx.db.find({
           collection: "categories",
+          depth: 2,
           limit: 1,
-          depth: 1,
           pagination: false,
           where: {
             slug: {
@@ -180,33 +181,46 @@ export const productsRouter = createTRPCRouter({
           },
         });
 
-        const formattedData = categoryData.docs.map((doc) => ({
-          ...doc,
-          subcategories: (doc.subcategories?.docs ?? []).map((doc) => ({
-            ...(doc as Category),
-            subcategories: undefined,
-          })),
-        }));
+        const category = categoryData.docs[0];
 
-        const subcategoriesSlugs = [];
-        const parentCategory = formattedData[0];
+        if (category) {
+          const categoryIds = [category.id];
 
-        if (parentCategory) {
-          subcategoriesSlugs.push(
-            ...parentCategory.subcategories.map(
-              (subcategory) => subcategory.slug
-            )
-          );
+          if (category.subcategories && category.subcategories.docs) {
+            category.subcategories.docs.forEach((sub: any) => {
+              categoryIds.push(sub.id);
+            });
+          }
 
-          where["category.slug"] = {
-            in: [parentCategory.slug, ...subcategoriesSlugs],
+          where["or"] = [
+            {
+              category: {
+                in: categoryIds,
+              },
+            },
+            {
+              subcategory: {
+                in: categoryIds,
+              },
+            },
+          ];
+        } else {
+          return {
+            docs: [],
+            totalDocs: 0,
+            totalPages: 0,
+            page: 1,
+            pagingCounter: 1,
+            hasPrevPage: false,
+            hasNextPage: false,
+            prevPage: null,
+            nextPage: null,
           };
         }
       }
 
       if (input.search && input.search.trim()) {
         const searchTerm = input.search.trim();
-
         where["name"] = {
           contains: searchTerm,
         };

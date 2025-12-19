@@ -11,6 +11,7 @@ export const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: "name",
+    defaultColumns: ["name", "slug", "order", "parent"],
     hidden: ({ user }) => !isSuperAdmin(user),
   },
   fields: [
@@ -29,6 +30,14 @@ export const Categories: CollectionConfig = {
     {
       name: "color",
       type: "text",
+    },
+    {
+      name: "order",
+      type: "number",
+      defaultValue: 0,
+      admin: {
+        position: "sidebar",
+      },
     },
     {
       name: "parent",

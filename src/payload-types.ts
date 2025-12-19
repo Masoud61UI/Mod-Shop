@@ -185,6 +185,7 @@ export interface Category {
   name: string;
   slug: string;
   color?: string | null;
+  order?: number | null;
   parent?: (string | null) | Category;
   subcategories?: {
     docs?: (string | Category)[];
@@ -240,6 +241,10 @@ export interface Product {
   sku: string;
   refundPolicy?: ('30-day' | '14-day' | '7-day' | '3-day' | '1-day' | 'no-refunds') | null;
   featured?: boolean | null;
+  /**
+   * مجموع موجودی همه رنگ‌ها و سایزها
+   */
+  totalStock?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -549,6 +554,7 @@ export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   color?: T;
+  order?: T;
   parent?: T;
   subcategories?: T;
   updatedAt?: T;
@@ -587,6 +593,7 @@ export interface ProductsSelect<T extends boolean = true> {
   sku?: T;
   refundPolicy?: T;
   featured?: T;
+  totalStock?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -12,6 +12,7 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: "name",
     hidden: ({ user }) => !isSuperAdmin(user),
+    defaultColumns: ["name", "sku", "totalStock", "price", "category"],
   },
   fields: [
     {
@@ -195,6 +196,23 @@ export const Products: CollectionConfig = {
       label: "محصول ویژه",
       defaultValue: false,
     },
+
+    {
+      name: "totalStock",
+      type: "number",
+      label: "کل موجودی",
+      admin: {
+        readOnly: true,
+        position: "sidebar",
+        description: "مجموع موجودی همه رنگ‌ها و سایزها",
+        condition: (data) => data?.inventory?.length > 0,
+      },
+      access: {
+        read: () => true,
+        create: () => false,
+        update: () => false,
+      },
+    },
   ],
   hooks: {
     beforeChange: [
@@ -210,6 +228,21 @@ export const Products: CollectionConfig = {
           });
         }
         return data;
+      },
+    ],
+
+    afterRead: [
+      ({ doc }) => {
+        if (doc.inventory && Array.isArray(doc.inventory)) {
+          const totalStock = doc.inventory.reduce(
+            (sum: number, item: any) => sum + (item.stock || 0),
+            0
+          );
+          doc.totalStock = totalStock;
+        } else {
+          doc.totalStock = 0;
+        }
+        return doc;
       },
     ],
   },
