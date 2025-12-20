@@ -113,6 +113,34 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@layer utilities {
+  .scroll-mt-20 {
+    scroll-margin-top: 5rem;
+  }
+}
+
+.accordion-enter {
+  max-height: 0;
+  opacity: 0;
+}
+
+.accordion-enter-active {
+  max-height: 500px;
+  opacity: 1;
+  transition: max-height 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
+.accordion-exit {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.accordion-exit-active {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 300ms ease-in-out, opacity 300ms ease-in-out;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
