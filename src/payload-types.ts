@@ -242,6 +242,10 @@ export interface Product {
   refundPolicy?: ('30-day' | '14-day' | '7-day' | '3-day' | '1-day' | 'no-refunds') | null;
   featured?: boolean | null;
   /**
+   * تعداد کل فروش این محصول
+   */
+  salesCount?: number | null;
+  /**
    * مجموع موجودی همه رنگ‌ها و سایزها
    */
   totalStock?: number | null;
@@ -593,6 +597,7 @@ export interface ProductsSelect<T extends boolean = true> {
   sku?: T;
   refundPolicy?: T;
   featured?: T;
+  salesCount?: T;
   totalStock?: T;
   updatedAt?: T;
   createdAt?: T;

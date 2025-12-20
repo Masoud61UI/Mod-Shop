@@ -1,8 +1,6 @@
 import type { SearchParams } from "nuqs/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
-
 import { getQueryClient, trpc } from "@/src/trpc/server";
-
 import { loadProductsFilters } from "@/src/modules/products/searchParams";
 import ProductViewList from "@/src/modules/products/ui/views/ProductViewList";
 
@@ -18,13 +16,18 @@ export const dynamic = "force-dynamic";
 export default async function page({ params, searchParams }: Props) {
   const { category } = await params;
   const filters = await loadProductsFilters(searchParams);
+  
+  // دریافت صفحه از URL
+  const searchParamsObj = await searchParams;
+  const page = parseInt(searchParamsObj.page as string || "1");
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchInfiniteQuery(
-    trpc.products.getMany.infiniteQueryOptions({
+  await queryClient.prefetchQuery(
+    trpc.products.getMany.queryOptions({
       ...filters,
       category,
-      limit: 8,
+      page, // ✅ اضافه شده
+      limit: 20, // ✅ اضافه شده
     })
   );
 

@@ -127,8 +127,9 @@ export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
       z.object({
+        page: z.number().default(1), // ✅ اضافه شده
+        limit: z.number().default(20),
         cursor: z.number().default(1),
-        limit: z.number().default(8),
         search: z.string().nullable().optional(),
         category: z.string().nullable().optional(),
         minPrice: z.string().nullable().optional(),
@@ -137,7 +138,7 @@ export const productsRouter = createTRPCRouter({
         featured: z.boolean().optional(),
       })
     )
-    .query(async ({ ctx, input }) => {
+     .query(async ({ ctx, input }) => {
       const where: Where = {};
       let sort: Sort = "-createdAt";
 
@@ -145,8 +146,11 @@ export const productsRouter = createTRPCRouter({
         sort = "-createdAt";
       } else if (input.sort === "قدیمی‌ترین") {
         sort = "+createdAt";
+      } else if (input.sort === "پرفروش‌ترین") {
+        sort = "-salesCount";
       }
 
+      // فیلترهای قیمت
       if (input.minPrice && input.maxPrice) {
         where.price = {
           greater_than_equal: input.minPrice,
@@ -209,7 +213,7 @@ export const productsRouter = createTRPCRouter({
             docs: [],
             totalDocs: 0,
             totalPages: 0,
-            page: 1,
+            page: input.page,
             pagingCounter: 1,
             hasPrevPage: false,
             hasNextPage: false,
@@ -226,17 +230,48 @@ export const productsRouter = createTRPCRouter({
         };
       }
 
+      // دریافت داده‌ها با صفحه‌بندی
       const data = await ctx.db.find({
         collection: "products",
         depth: 1,
         where,
         sort,
-        page: input.cursor,
+        page: input.page,
         limit: input.limit,
       });
 
+      let sortedDocs = data.docs;
+      
+      // مرتب‌سازی دستی
+      if (input.sort === "جدیدترین" || input.sort === "قدیمی‌ترین") {
+        sortedDocs = [...data.docs].sort((a, b) => {
+          try {
+            const dateA = new Date(a.createdAt).getTime();
+            const dateB = new Date(b.createdAt).getTime();
+            
+            if (input.sort === "جدیدترین") {
+              return dateB - dateA;
+            } else {
+              return dateA - dateB;
+            }
+          } catch (error) {
+            console.error("Sort error:", error);
+            return 0;
+          }
+        });
+      }
+      
+      if (input.sort === "پرفروش‌ترین") {
+        sortedDocs = [...data.docs].sort((a, b) => {
+          const salesA = a.salesCount || 0;
+          const salesB = b.salesCount || 0;
+          return salesB - salesA;
+        });
+      }
+      
+      // افزودن اطلاعات نظرات
       const dataWithSummarizedReviews = await Promise.all(
-        data.docs.map(async (doc) => {
+        sortedDocs.map(async (doc) => {
           const reviewsData = await ctx.db.find({
             collection: "reviews" as any,
             where: {
@@ -269,7 +304,7 @@ export const productsRouter = createTRPCRouter({
           };
         })
       );
-
+      
       return {
         ...data,
         docs: dataWithSummarizedReviews.map((doc) => ({
@@ -277,5 +312,5 @@ export const productsRouter = createTRPCRouter({
           image: (doc.images as { image: Media }[])[0]?.image as Media | null,
         })),
       };
-    }),
+  }),
 });

@@ -1,4 +1,4 @@
-import { useQueryStates, parseAsString, parseAsStringLiteral } from "nuqs";
+import { useQueryStates, parseAsString, parseAsStringLiteral, parseAsInteger } from "nuqs";
 
 const sortValues = ["پرفروش‌ترین", "جدیدترین", "قدیمی‌ترین"] as const;
 
@@ -14,6 +14,11 @@ const params = {
       clearOnDefault: true,
     })
     .withDefault(""),
+  page: parseAsInteger
+    .withOptions({
+      clearOnDefault: true,
+    })
+    .withDefault(1), // ✅ اضافه شده
 };
 
 export const useProductFilters = () => {

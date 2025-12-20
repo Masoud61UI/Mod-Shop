@@ -10,12 +10,16 @@ import { Suspense } from "react";
 
 import CategorySection from "@/src/modules/home/ui/components/CategorySection";
 import Container from "@/src/modules/home/ui/components/Container";
+import SearchResultsSummary from "@/src/modules/home/ui/components/SearchResultsSummary";
 
 interface Props {
   searchParams: Promise<SearchParams>;
 }
 
-const HOME_CATEGORIES = [
+// تعداد دسته‌بندی‌ها برای استفاده در کامپوننت
+export const HOME_CATEGORIES_COUNT = 4;
+
+export const HOME_CATEGORIES = [
   {
     title: "جدیدترین محصولات",
     slug: null,
@@ -46,51 +50,110 @@ const HOME_CATEGORIES = [
   },
 ];
 
+// تابع برای بررسی نتایج جستجو
+async function checkSearchResults(searchValue: string, queryClient: any) {
+  let hasResults = false;
+  let totalResults = 0;
+  
+  // فقط یک نمونه از query را چک می‌کنیم (جدیدترین محصولات)
+  try {
+    const queryOptions: any = {
+      limit: 5,
+      sort: "جدیدترین",
+      search: searchValue || undefined,
+    };
+    
+    await queryClient.prefetchQuery(
+      trpc.products.getMany.queryOptions(queryOptions)
+    );
+    
+    const queryState = queryClient.getQueryState(
+      trpc.products.getMany.queryOptions(queryOptions).queryKey
+    );
+    
+    if (queryState?.data?.docs && queryState.data.docs.length > 0) {
+      hasResults = true;
+      totalResults = queryState.data.totalDocs || 0;
+    }
+  } catch (error) {
+    console.error("Error checking search results:", error);
+  }
+  
+  return { hasResults, totalResults };
+}
+
 export default async function page({ searchParams }: Props) {
+  const searchParamsObj = await searchParams;
+  const searchValue = searchParamsObj.search as string || "";
+  
   const queryClient = getQueryClient();
 
+  // Prefetch برای همه دسته‌بندی‌ها
   const prefetchPromises = HOME_CATEGORIES.map((category) => {
-    if (category.slug) {
-      return queryClient.prefetchQuery(
-        trpc.products.getMany.queryOptions({
-          category: category.slug,
-          limit: 5,
-          sort: "جدیدترین",
-        })
-      );
+    const queryOptions: any = {
+      limit: 5,
+      sort: "جدیدترین",
+    };
+
+    if (searchValue) {
+      queryOptions.search = searchValue;
     }
+
+    if (category.slug) {
+      queryOptions.category = category.slug;
+    }
+
     return queryClient.prefetchQuery(
-      trpc.products.getMany.queryOptions({
-        limit: 5,
-        sort: "جدیدترین",
-      })
+      trpc.products.getMany.queryOptions(queryOptions)
     );
   });
 
   await Promise.all(prefetchPromises);
 
+  // بررسی نتایج جستجو
+  let searchResults = { hasResults: false, totalResults: 0 };
+  if (searchValue) {
+    searchResults = await checkSearchResults(searchValue, queryClient);
+  }
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="min-h-screen">
         <Container>
-          <div className="mt-2 mb-3 md:mt-3.5 md:mb-5.5">
+          <div className="mt-2 mb-2.5 md:mt-3.5 md:mb-5.5">
             <Suspense fallback={<SearchFiltersLoading />}>
               <SearchFilters />
             </Suspense>
           </div>
 
-          <div className="space-y-16">
-            {HOME_CATEGORIES.map((category) => (
-              <CategorySection
-                key={category.slug || "all"}
-                title={category.title}
-                slug={category.slug}
-                description={category.description}
-                link={category.link}
-                accentColor={category.accentColor}
-              />
-            ))}
-          </div>
+          {/* نمایش نتیجه جستجو */}
+          {searchValue && (
+            <SearchResultsSummary 
+              searchValue={searchValue}
+              hasResults={searchResults.hasResults}
+              totalResults={searchResults.totalResults}
+              categoriesCount={HOME_CATEGORIES.length}
+            />
+          )}
+
+          {/* نمایش دسته‌بندی‌ها */}
+          {(!searchValue || searchResults.hasResults) && (
+            <div className="space-y-16">
+              {HOME_CATEGORIES.map((category) => (
+                <CategorySection
+                  key={category.slug || "all"}
+                  title={searchValue ? `نتایج در ${category.title}` : category.title}
+                  slug={category.slug}
+                  description={searchValue 
+                    ? `محصولات مرتبط با "${searchValue}"` 
+                    : category.description}
+                  link={category.link + (searchValue ? `&search=${encodeURIComponent(searchValue)}` : '')}
+                  accentColor={category.accentColor}
+                  searchValue={searchValue}
+                />
+              ))}
+            </div>
+          )}
         </Container>
       </div>
     </HydrationBoundary>

@@ -18,7 +18,7 @@ export default function ProductViewList({
     <Container>
       {showFilters && (
         <div className="flex flex-col lg:flex-row lg:items-center gap-y-2 lg:gap-y-0 justify-between my-6">
-          <p className="text-lg font-medium text-gray-700">محصولات منتخب</p>
+          <p className="mb-0.5 sm:mb-0 text-lg font-medium text-gray-700">همه محصولات</p>
           <div className="hidden lg:block flex-1 h-px bg-gray-200 mx-4"></div>
           <ProductSort />
         </div>

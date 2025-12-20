@@ -26,7 +26,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
         </Link>
       </div>
 
-      <div className="space-y-4 border-t pt-4">
+      <div className="space-y-6.5 border-t pt-5">
         {featuredProducts.map((product) => (
           <FeaturedProductItem key={product.id} product={product} />
         ))}

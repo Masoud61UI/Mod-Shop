@@ -414,9 +414,17 @@ export const Orders: CollectionConfig = {
                   },
                 });
               }
+
+              await payload.update({
+                collection: "products",
+                id: item.product,
+                data: {
+                  salesCount: (product.salesCount || 0) + item.quantity,
+                },
+              });
             }
           } catch (error) {
-            console.error("Error updating inventory:", error);
+            console.error("Error updating inventory and sales count:", error);
           }
         }
       },

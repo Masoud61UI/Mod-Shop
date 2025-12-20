@@ -52,7 +52,7 @@ export default function ProductInfo({
           }`}
         >
           {isInStock
-            ? `✓ موجود در انبار (${toPersianNumber(selectedDisplayStock)} عدد)`
+            ? `✓ موجود در انبار (فقط ${toPersianNumber(selectedDisplayStock)} عدد)`
             : selectedColor && selectedSize
               ? "✗ ناموجود"
               : "لطفا رنگ و سایز را انتخاب کنید"}

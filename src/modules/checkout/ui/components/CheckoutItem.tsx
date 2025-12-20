@@ -94,7 +94,7 @@ export default function CheckoutItem({
                   ? `📦 حداکثر موجودی (${toPersianNumber(availableStock)})`
                   : availableStock <= 5
                     ? `📦 موجودی محدود: ${toPersianNumber(availableStock)} عدد`
-                    : `📦 موجودی: ${toPersianNumber(availableStock)} عدد`}
+                    : `📦 موجودی جدید: ${toPersianNumber(availableStock)} عدد`}
               </span>
             </div>
 

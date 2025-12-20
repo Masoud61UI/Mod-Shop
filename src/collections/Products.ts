@@ -12,7 +12,14 @@ export const Products: CollectionConfig = {
   admin: {
     useAsTitle: "name",
     hidden: ({ user }) => !isSuperAdmin(user),
-    defaultColumns: ["name", "sku", "totalStock", "price", "category"],
+    defaultColumns: [
+      "name",
+      "sku",
+      "salesCount",
+      "totalStock",
+      "price",
+      "category",
+    ],
   },
   fields: [
     {
@@ -196,7 +203,16 @@ export const Products: CollectionConfig = {
       label: "محصول ویژه",
       defaultValue: false,
     },
-
+    {
+      name: "salesCount",
+      type: "number",
+      label: "تعداد فروش",
+      defaultValue: 0,
+      admin: {
+        position: "sidebar",
+        description: "تعداد کل فروش این محصول",
+      },
+    },
     {
       name: "totalStock",
       type: "number",
