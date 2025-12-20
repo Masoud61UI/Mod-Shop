@@ -167,7 +167,7 @@ export default function AccordionFAQ() {
         <div
           key={category.id}
           id={category.id}
-          className="mb-12 last:mb-0 scroll-mt-20"
+          className="mb-13 md:mb-17 last:mb-0 scroll-mt-20"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2.5 bg-amber-50 rounded-lg">{category.icon}</div>
