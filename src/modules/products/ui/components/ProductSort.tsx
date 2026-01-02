@@ -15,29 +15,25 @@ export default function ProductSort() {
   const handleSort = async (sortValue: "پرفروش‌ترین" | "جدیدترین" | "قدیمی‌ترین") => {
     console.log("🎯 Setting sort to:", sortValue);
 
-    // گرفتن داده‌های فعلی از cache
     const cachedData: any = queryClient.getQueryData(["products"]);
     let totalPages = cachedData?.totalPages || 1;
     
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", sortValue);
     
-    // تعیین صفحه مقصد
     let targetPage = 1;
     
     if (sortValue === "قدیمی‌ترین") {
-      targetPage = totalPages; // صفحه آخر برای قدیمی‌ترین
+      targetPage = totalPages;
     } else {
-      targetPage = 1; // صفحه اول برای بقیه
+      targetPage = 1;
     }
     
     params.set("page", targetPage.toString());
     router.push(`?${params.toString()}`);
 
-    // آپدیت فیلترها
     setFilters({ ...filters, sort: sortValue, page: targetPage });
 
-    // فورس ریفرش query
     setTimeout(() => {
       queryClient.invalidateQueries({
         queryKey: ["products"],

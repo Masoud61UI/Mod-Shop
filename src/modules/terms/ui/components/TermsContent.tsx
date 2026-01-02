@@ -176,7 +176,6 @@ export default function TermsContent() {
         ))}
       </div>
 
-      {/* بخش پایانی */}
       <div className="mt-12 p-6 bg-purple-50 rounded-2xl border border-purple-100">
         <div className="flex items-start gap-4">
           <AlertCircle className="h-6 w-6 text-purple-600 mt-0.5 flex-shrink-0" />

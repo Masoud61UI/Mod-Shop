@@ -18,7 +18,7 @@ const params = {
     .withOptions({
       clearOnDefault: true,
     })
-    .withDefault(1), // ✅ اضافه شده
+    .withDefault(1),
 };
 
 export const useProductFilters = () => {

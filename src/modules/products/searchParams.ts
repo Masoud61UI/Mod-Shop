@@ -1,4 +1,3 @@
-// در فایل searchParams.ts
 import { createLoader, parseAsString, parseAsStringLiteral, parseAsInteger } from "nuqs/server";
 
 export const sortValues = ["پرفروش‌ترین", "جدیدترین", "قدیمی‌ترین"] as const;
@@ -24,7 +23,7 @@ const params = {
     .withOptions({
       clearOnDefault: true,
     })
-    .withDefault(1), // ✅ اضافه شده
+    .withDefault(1), 
 };
 
 export const loadProductsFilters = createLoader(params);

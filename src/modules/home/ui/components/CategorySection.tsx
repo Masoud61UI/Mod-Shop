@@ -47,47 +47,42 @@ export default function CategorySection({
       hover: "hover:text-purple-700",
       bg: "bg-purple-600",
       lightBg: "bg-purple-50",
-      badgeBg: "bg-purple-100", // اضافه شده
+      badgeBg: "bg-purple-100",
     },
     amber: {
       text: "text-amber-600",
       hover: "hover:text-amber-700",
       bg: "bg-amber-600",
       lightBg: "bg-amber-50",
-      badgeBg: "bg-amber-100", // اضافه شده
+      badgeBg: "bg-amber-100",
     },
     blue: {
       text: "text-blue-600",
       hover: "hover:text-blue-700",
       bg: "bg-blue-600",
       lightBg: "bg-blue-50",
-      badgeBg: "bg-blue-100", // اضافه شده
+      badgeBg: "bg-blue-100",
     },
     pink: {
       text: "text-pink-600",
       hover: "hover:text-pink-700",
       bg: "bg-pink-600",
       lightBg: "bg-pink-50",
-      badgeBg: "bg-pink-100", // اضافه شده
+      badgeBg: "bg-pink-100",
     },
   };
 
   const colors = colorClasses[accentColor];
 
-  // **تغییر اصلی ۱: اگر جستجو شده، فقط دسته‌بندی‌ای که محصول دارد را نشان بده**
   if (currentSearchValue) {
-    // اگر جستجو شده و محصولی در این دسته‌بندی نیست، کامپوننت را نشان نده
     if (products.length === 0) {
       return null;
     }
-    // اگر جستجو شده و محصول داریم، اما دسته‌بندی "جدیدترین محصولات" (slug: null) است، نشان نده
-    // این یعنی فقط دسته‌بندی‌های خاص (مردانه، زنانه، اکسسوری) نشان داده شوند
     if (!slug) {
       return null;
     }
   }
 
-  // اگر در حالت عادی (بدون جستجو) محصولی نیست، نشان نده
   if (!isLoading && products.length === 0 && !currentSearchValue) {
     return null;
   }

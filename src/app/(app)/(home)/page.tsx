@@ -16,7 +16,6 @@ interface Props {
   searchParams: Promise<SearchParams>;
 }
 
-// تعداد دسته‌بندی‌ها برای استفاده در کامپوننت
 export const HOME_CATEGORIES_COUNT = 4;
 
 export const HOME_CATEGORIES = [
@@ -50,12 +49,10 @@ export const HOME_CATEGORIES = [
   },
 ];
 
-// تابع برای بررسی نتایج جستجو
 async function checkSearchResults(searchValue: string, queryClient: any) {
   let hasResults = false;
   let totalResults = 0;
   
-  // فقط یک نمونه از query را چک می‌کنیم (جدیدترین محصولات)
   try {
     const queryOptions: any = {
       limit: 5,
@@ -88,7 +85,6 @@ export default async function page({ searchParams }: Props) {
   
   const queryClient = getQueryClient();
 
-  // Prefetch برای همه دسته‌بندی‌ها
   const prefetchPromises = HOME_CATEGORIES.map((category) => {
     const queryOptions: any = {
       limit: 5,
@@ -110,7 +106,6 @@ export default async function page({ searchParams }: Props) {
 
   await Promise.all(prefetchPromises);
 
-  // بررسی نتایج جستجو
   let searchResults = { hasResults: false, totalResults: 0 };
   if (searchValue) {
     searchResults = await checkSearchResults(searchValue, queryClient);
@@ -126,7 +121,6 @@ export default async function page({ searchParams }: Props) {
             </Suspense>
           </div>
 
-          {/* نمایش نتیجه جستجو */}
           {searchValue && (
             <SearchResultsSummary 
               searchValue={searchValue}
@@ -136,7 +130,6 @@ export default async function page({ searchParams }: Props) {
             />
           )}
 
-          {/* نمایش دسته‌بندی‌ها */}
           {(!searchValue || searchResults.hasResults) && (
             <div className="space-y-16">
               {HOME_CATEGORIES.map((category) => (

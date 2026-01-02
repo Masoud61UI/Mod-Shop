@@ -1,5 +1,6 @@
 import z from "zod";
 import { TRPCError } from "@trpc/server";
+import type { Order } from "@/src/payload-types";
 
 import { Media } from "@/src/payload-types";
 import {
@@ -56,59 +57,110 @@ export const checkoutRouter = createTRPCRouter({
           });
         }
 
+        for (const item of input.items) {
+          const product = products.docs.find(
+            (p: any) => p.id === item.productId
+          );
+          if (product && product.inventory) {
+            const inventoryItem = product.inventory.find(
+              (inv: any) =>
+                inv.colorName === item.color && inv.size === item.size
+            );
+            if (inventoryItem && inventoryItem.stock < item.quantity) {
+              throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: `موجودی محصول ${item.productName} کافی نیست`,
+              });
+            }
+          }
+        }
+
         const subtotal = input.items.reduce(
           (sum, item) => sum + item.price * item.quantity,
           0
         );
         const total = subtotal + input.shippingCost;
 
-        const order = await ctx.db.create({
-          collection: "orders" as any,
-          data: {
-            customer: {
-              ...input.customerInfo,
-              user: ctx.session.user.id,
+        const orderItems = input.items.map((item) => {
+          const skuParts = [item.productId];
+          if (item.color) skuParts.push(item.color);
+          if (item.size) skuParts.push(item.size);
+          const combinedSku = skuParts.join("-");
+
+          return {
+            product: item.productId,
+            productName: item.productName,
+            variant: {
+              colorName: item.color || null,
+              size: item.size || null,
+              sku: combinedSku,
             },
-            items: input.items.map((item) => ({
-              product: item.productId,
-              productName: item.productName,
-              variant: {
-                colorName: item.color,
-                size: item.size,
-              },
-              quantity: item.quantity,
-              unitPrice: item.price,
-              totalPrice: item.price * item.quantity,
-            })),
-            pricing: {
-              subtotal,
-              shippingCost: input.shippingCost,
-              discount: 0,
-              total,
-            },
-            shipping: {
-              method: "standard",
-              shippingStatus: "pending",
-            },
-            payment: {
-              method: "pending",
-              paymentStatus: "pending",
-            },
-            status: "pending",
+            quantity: item.quantity,
+            unitPrice: item.price,
+            totalPrice: item.price * item.quantity,
+          };
+        });
+
+        const orderData: Omit<
+          Order,
+          "id" | "updatedAt" | "createdAt" | "deletedAt"
+        > & {
+          id?: string;
+          updatedAt?: string;
+          createdAt?: string;
+          deletedAt?: string;
+        } = {
+          orderNumber: `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 4).toUpperCase()}`,
+          status: "pending",
+          customer: {
+            user: ctx.session.user.id,
+            fullName: input.customerInfo.fullName,
+            phone: input.customerInfo.phone,
+            email: input.customerInfo.email || "",
+            address: input.customerInfo.address,
+            city: input.customerInfo.city,
+            postalCode: input.customerInfo.postalCode,
+            notes: input.customerInfo.notes || "",
           } as any,
+          items: orderItems as any,
+          pricing: {
+            subtotal: subtotal,
+            shippingCost: input.shippingCost,
+            discount: 0,
+            total: total,
+          } as any,
+          shipping: {
+            method: "standard",
+            trackingNumber: "",
+            estimatedDelivery: null,
+          } as any,
+          payment: {
+            method: "zarinpal",
+            transactionId: "",
+            refId: "",
+            paymentDate: null,
+            paymentStatus: "pending",
+          } as any,
+          metadata: {
+            ip: "",
+            userAgent: "",
+          } as any,
+        };
+
+        const order = await ctx.db.create({
+          collection: "orders",
+          data: orderData as any, 
         });
 
         const orderResult = order as any;
-        const orderNumber = orderResult.orderNumber;
-        const orderId = orderResult.id;
 
         return {
           success: true,
-          orderId,
-          orderNumber,
+          orderId: orderResult.id,
+          orderNumber: orderResult.orderNumber,
           amount: total,
           message: "سفارش با موفقیت ایجاد شد",
-          nextStep: "pay",
+          nextStep: "payment",
         };
       } catch (error) {
         console.error("Error creating order:", error);
@@ -128,16 +180,17 @@ export const checkoutRouter = createTRPCRouter({
     .input(
       z.object({
         orderId: z.string(),
-        paymentMethod: z.string().default("cash"),
+        paymentMethod: z.string().default("zarinpal"),
         transactionId: z.string().optional(),
+        refId: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       try {
-        const order = (await ctx.db.findByID({
-          collection: "orders" as any,
+        const order = await ctx.db.findByID({
+          collection: "orders",
           id: input.orderId,
-        })) as any;
+        });
 
         if (!order) {
           throw new TRPCError({
@@ -146,28 +199,36 @@ export const checkoutRouter = createTRPCRouter({
           });
         }
 
-        if (order.customer?.user !== ctx.session.user.id) {
+        const orderData = order as any;
+
+        if (orderData.customer?.user !== ctx.session.user.id) {
           throw new TRPCError({
             code: "UNAUTHORIZED",
             message: "دسترسی غیرمجاز",
           });
         }
 
-        await ctx.db.update({
-          collection: "orders" as any,
-          id: order.id,
-          data: {
-            status: "paid",
-            "payment.method": input.paymentMethod,
-            "payment.status": "success",
-            "payment.transactionId": input.transactionId,
-            "payment.paymentDate": new Date().toISOString(),
+        const updateData: Partial<Order> = {
+          status: "paid",
+          payment: {
+            ...orderData.payment,
+            method: input.paymentMethod,
+            status: "success",
+            transactionId: input.transactionId || "",
+            refId: input.refId || "",
+            paymentDate: new Date().toISOString(),
           } as any,
+        };
+
+        await ctx.db.update({
+          collection: "orders",
+          id: orderData.id,
+          data: updateData,
         });
 
         return {
           success: true,
-          orderNumber: order.orderNumber,
+          orderNumber: orderData.orderNumber,
           message: "سفارش با موفقیت پرداخت شد",
         };
       } catch (error) {
@@ -187,7 +248,7 @@ export const checkoutRouter = createTRPCRouter({
   getUserOrders: protectedProcedure.query(async ({ ctx }) => {
     try {
       const orders = await ctx.db.find({
-        collection: "orders" as any,
+        collection: "orders",
         where: {
           "customer.user": {
             equals: ctx.session.user.id,

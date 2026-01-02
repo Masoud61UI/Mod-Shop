@@ -17,7 +17,6 @@ export default async function page({ params, searchParams }: Props) {
   const { category } = await params;
   const filters = await loadProductsFilters(searchParams);
   
-  // دریافت صفحه از URL
   const searchParamsObj = await searchParams;
   const page = parseInt(searchParamsObj.page as string || "1");
 
@@ -26,8 +25,8 @@ export default async function page({ params, searchParams }: Props) {
     trpc.products.getMany.queryOptions({
       ...filters,
       category,
-      page, // ✅ اضافه شده
-      limit: 20, // ✅ اضافه شده
+      page, 
+      limit: 20, 
     })
   );
 

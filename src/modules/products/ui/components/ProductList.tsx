@@ -21,7 +21,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
   const router = useRouter();
   const searchValue = searchParams.get("search") || "";
 
-  // دریافت صفحه از URL
   const currentPage = parseInt(searchParams.get("page") || "1");
   const prevSortRef = useRef(filters.sort);
   const prevFiltersRef = useRef(filters);
@@ -38,7 +37,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
     })
   );
 
-  // اصلاح شده: gap برای موبایل 1 و برای دسکتاپ 4 یا 5
   const gridClass =
     gridLayout === "home"
       ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-5"
@@ -47,29 +45,24 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
   const hasSearch = searchValue.trim().length > 0;
   const noProductsFound = data?.docs.length === 0;
 
-  // تابع تغییر صفحه
   const goToPage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     router.push(`?${params.toString()}`);
   };
 
-  // تابع ساده‌تر برای نمایش صفحات
   const getPageNumbers = (): (number | string)[] => {
     const totalPages = data?.totalPages || 1;
     const current = currentPage;
 
-    // اگر صفحات کم هستند، همه را نشان بده
     if (totalPages <= 7) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
     const result: (number | string)[] = [];
 
-    // همیشه صفحه 1
     result.push(1);
 
-    // صفحات نزدیک به صفحه فعلی
     if (current > 3) {
       result.push("...");
     }
@@ -85,7 +78,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
       result.push("...");
     }
 
-    // همیشه صفحه آخر
     if (totalPages > 1) {
       result.push(totalPages);
     }
@@ -93,22 +85,16 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
     return result;
   };
 
-  // تابع تغییر سورت
   const handleSortChange = (
     newSort: "جدیدترین" | "پرفروش‌ترین" | "قدیمی‌ترین"
   ) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("sort", newSort);
 
-    // تصمیم‌گیری برای صفحه مقصد
     let targetPage = 1;
 
     if (newSort === "قدیمی‌ترین") {
-      // برای قدیمی‌ترین باید به صفحه آخر برویم
-      // اما چون هنوز totalPages رو نداریم، باید query جدید بزنیم
-      // یک راه حل: بگذارید کاربر بعد از تغییر سورت، خودش به صفحه آخر برود
-      // راه بهتر: یک useEffect جداگانه
-      targetPage = 1; // موقتاً، بعداً در useEffect اصلاح می‌شود
+      targetPage = 1; 
     } else if (newSort === "جدیدترین" || newSort === "پرفروش‌ترین") {
       targetPage = 1;
     }
@@ -116,25 +102,19 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
     params.set("page", targetPage.toString());
     router.push(`?${params.toString()}`);
 
-    // آپدیت فیلترها
     setFilters({ ...filters, sort: newSort, page: targetPage });
   };
 
-  // useEffect برای مدیریت تغییر سورت به "قدیمی‌ترین"
   useEffect(() => {
     const currentSort = filters.sort;
     const prevSort = prevSortRef.current;
 
-    // اگر سورت به "قدیمی‌ترین" تغییر کرد
     if (currentSort === "قدیمی‌ترین" && prevSort !== "قدیمی‌ترین") {
-      // و الان در صفحه اول هستیم
       if (currentPage === 1 && data?.totalPages && data.totalPages > 1) {
-        // به صفحه آخر برو
         const params = new URLSearchParams(searchParams.toString());
         params.set("page", data.totalPages.toString());
         router.replace(`?${params.toString()}`);
 
-        // آپدیت فیلترها
         setFilters({ ...filters, page: data.totalPages });
 
         console.log(
@@ -143,7 +123,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
       }
     }
 
-    // ذخیره سورت فعلی برای دفعه بعد
     prevSortRef.current = currentSort;
     prevFiltersRef.current = filters;
   }, [
@@ -156,20 +135,16 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
     setFilters,
   ]);
 
-  // هنگام تغییر هر فیلتر (غیر از سورت) به صفحه اول برو
   useEffect(() => {
     const currentFilters = filters;
     const prevFilters = prevFiltersRef.current;
 
-    // بررسی تغییرات فیلترها
     const filtersChanged =
       currentFilters.minPrice !== prevFilters.minPrice ||
       currentFilters.maxPrice !== prevFilters.maxPrice ||
       currentFilters.sort !== prevFilters.sort;
 
-    // اگر فیلترها تغییر کردند و صفحه اول نیستیم
     if (filtersChanged && currentPage !== 1) {
-      // اما اگر فقط سورت به "قدیمی‌ترین" تغییر کرده، این کار رو نکن
       if (
         !(
           prevFilters.sort !== "قدیمی‌ترین" &&
@@ -180,7 +155,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
         params.set("page", "1");
         router.replace(`?${params.toString()}`);
 
-        // آپدیت فیلترها
         setFilters({ ...filters, page: 1 });
       }
     }
@@ -215,9 +189,7 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
 
   return (
     <>
-      {/* Header با اطلاعات صفحه‌بندی */}
       <div className="flex items-center gap-6 text-sm text-gray-700 mt-2 mb-8">
-        {/* تعداد محصولات */}
         <div className="flex items-center gap-2">
           <span className="text-gray-500">محصول</span>
           <div className="flex items-center gap-1">
@@ -229,10 +201,8 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
           </div>
         </div>
         
-        {/* جداکننده */}
         <div className="w-px h-4 bg-gray-300"></div>
         
-        {/* شماره صفحه */}
         <div className="flex items-center gap-2">
           <span className="text-gray-500">صفحه</span>
           <div className="flex items-center gap-1">
@@ -245,7 +215,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
         </div>
       </div>
 
-      {/* GRID با scale برای موبایل */}
       <div className={gridClass}>
         {data?.docs.map((product) => (
           <div
@@ -274,10 +243,8 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
         ))}
       </div>
 
-      {/* Pagination Component */}
       {data?.totalPages && data.totalPages > 1 && (
         <div className="flex justify-center items-center mt-8 gap-2">
-          {/* دکمه قبلی */}
           <Button
             variant="outline"
             size="sm"
@@ -289,7 +256,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
             قبلی
           </Button>
 
-          {/* شماره صفحات */}
           <div className="flex items-center gap-1">
             {getPageNumbers().map((page, index) =>
               page === "..." ? (
@@ -314,7 +280,6 @@ export const ProductList = ({ category, gridLayout = "default" }: Props) => {
             )}
           </div>
 
-          {/* دکمه بعدی */}
           <Button
             variant="outline"
             size="sm"
@@ -337,7 +302,7 @@ export const ProductListSkeleton = ({
   gridLayout?: "default" | "home";
 }) => {
   const gridClass =
-    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-5"; // اینجا هم اصلاح شد
+    "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-5";
 
   return (
     <div className={gridClass}>

@@ -127,7 +127,7 @@ export const productsRouter = createTRPCRouter({
   getMany: baseProcedure
     .input(
       z.object({
-        page: z.number().default(1), // ✅ اضافه شده
+        page: z.number().default(1),
         limit: z.number().default(20),
         cursor: z.number().default(1),
         search: z.string().nullable().optional(),
@@ -150,7 +150,6 @@ export const productsRouter = createTRPCRouter({
         sort = "-salesCount";
       }
 
-      // فیلترهای قیمت
       if (input.minPrice && input.maxPrice) {
         where.price = {
           greater_than_equal: input.minPrice,
@@ -230,7 +229,6 @@ export const productsRouter = createTRPCRouter({
         };
       }
 
-      // دریافت داده‌ها با صفحه‌بندی
       const data = await ctx.db.find({
         collection: "products",
         depth: 1,
@@ -242,7 +240,6 @@ export const productsRouter = createTRPCRouter({
 
       let sortedDocs = data.docs;
       
-      // مرتب‌سازی دستی
       if (input.sort === "جدیدترین" || input.sort === "قدیمی‌ترین") {
         sortedDocs = [...data.docs].sort((a, b) => {
           try {
@@ -269,7 +266,6 @@ export const productsRouter = createTRPCRouter({
         });
       }
       
-      // افزودن اطلاعات نظرات
       const dataWithSummarizedReviews = await Promise.all(
         sortedDocs.map(async (doc) => {
           const reviewsData = await ctx.db.find({

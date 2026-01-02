@@ -7,10 +7,12 @@ interface CheckoutSummaryProps {
   isFreeShipping: boolean;
   shippingMessage: string;
   freeThreshold: number;
-  onCheckout: () => void;
+  onCheckout?: () => Promise<void> | void;
   isLoading?: boolean;
   buttonText?: string;
   buttonDescription?: string;
+  showEditButton?: boolean; 
+  onEditCart?: () => void; 
 }
 
 const getRemainingForFreeShipping = (
@@ -43,7 +45,7 @@ export default function CheckoutSummary({
   const progressPercentage = Math.min((subtotal / freeThreshold) * 100, 100);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border p-6 sticky top-6">
+    <div className="bg-white rounded-xl shadow-sm border p-6 top-6">
       <h2 className="text-xl font-bold text-right mb-6">خلاصه سفارش</h2>
 
       <div className="mb-6">
@@ -123,7 +125,7 @@ export default function CheckoutSummary({
           <span className="text-lg font-bold text-gray-900">
             مبلغ قابل پرداخت
           </span>
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-center gap-0.5">
             <span className="text-2xl font-bold text-purple-600">
               {formatToman(total)}
             </span>
@@ -136,7 +138,7 @@ export default function CheckoutSummary({
         <button
           onClick={onCheckout}
           disabled={isLoading || totalQuantity === 0}
-          className={`w-full h-14 rounded-xl font-medium transition-all duration-200 ${
+          className={`w-full h-13 rounded-md font-medium transition-all duration-200 ${
             isLoading || totalQuantity === 0
               ? "bg-gray-200 text-gray-500 cursor-not-allowed"
               : "bg-purple-600 hover:bg-purple-700 text-white cursor-pointer shadow-sm hover:shadow"
