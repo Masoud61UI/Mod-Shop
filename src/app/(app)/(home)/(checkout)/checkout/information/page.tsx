@@ -54,23 +54,26 @@ export default function CheckoutInformationPage() {
 
   const createOrderMutation = useMutation(
     trpc.checkout.createOrder.mutationOptions({
-      onSuccess: (result) => {
-        const checkoutData = {
-          orderId: result.orderId,
-          orderNumber: result.orderNumber,
-          amount: result.amount,
-          customerInfo: formData,
-          cartItems: items,
-          shippingCost,
-        };
-        localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
-        localStorage.setItem("currentOrderId", result.orderId);
-        localStorage.setItem("checkout-info", JSON.stringify(formData));
+onSuccess: (result) => {  
+  const checkoutData = {
+    orderId: result.orderId,
+    orderNumber: result.orderNumber,
+    amount: result.amount,
+    customerInfo: formData,
+    cartItems: items,
+    shippingCost,
+  };
+  
+  localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+  localStorage.setItem("currentOrderId", result.orderId);
+  localStorage.setItem("checkout-info", JSON.stringify(formData));
 
-        clearAllCarts();
-
-        router.push(`/checkout/payment?orderId=${result.orderId}&orderNumber=${result.orderNumber}`);
-      },
+  clearAllCarts();
+  
+  setTimeout(() => {
+    window.location.href = `/checkout-success?orderId=${result.orderId}&orderNumber=${result.orderNumber}`;
+  }, 300);
+},
       onError: (error) => {
         console.error("Error creating order:", error);
         alert(error?.message || "خطا در ایجاد سفارش. لطفا دوباره تلاش کنید.");
@@ -438,22 +441,8 @@ export default function CheckoutInformationPage() {
           </div>
 
           <div className="lg:col-span-3">
-            <CheckoutSummary
-              totalQuantity={totalQuantity}
-              subtotal={subtotal}
-              shippingCost={shippingCost}
-              isFreeShipping={isFreeShipping}
-              shippingMessage={shippingSettings.message}
-              freeThreshold={shippingSettings.freeThreshold}
-              onCheckout={handleCheckoutSummaryClick}
-              isLoading={loading}
-              buttonText="ادامه و پرداخت"
-              buttonDescription="برای تکمیل سفارش و پرداخت کلیک کنید"
-              showEditButton={true}
-              onEditCart={() => router.push("/checkout")}
-            />
 
-            <div className="bg-white rounded-xl shadow-sm p-6 mt-6 border border-gray-200">
+            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
               <h3 className="font-medium text-gray-900 mb-4">
                 اقلام سفارش شما
               </h3>
@@ -465,7 +454,7 @@ export default function CheckoutInformationPage() {
                       key={index}
                       className="flex items-center gap-3 py-2 border-b border-gray-100 last:border-0"
                     >
-                      <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-gray-100 rounded-md flex items-center justify-center">
                         {product?.image?.url ? (
                           <img
                             src={product.image.url}
@@ -473,7 +462,7 @@ export default function CheckoutInformationPage() {
                             className="w-10 h-10 object-cover rounded"
                           />
                         ) : (
-                          <div className="text-gray-400 text-xs">
+                          <div className="text-gray-300 text-xs text-center">
                             بدون تصویر
                           </div>
                         )}
